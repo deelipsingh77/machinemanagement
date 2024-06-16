@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}Login{% endblock title %} 
+{% block content %}
+    <div class="login-container | h-screen flex justify-center items-center">
+        <div class="shadow-2xl min-h-80 rounded-2xl min-w-64 flex flex-col ">
+            <h1 class="text-center text-4xl font-bold p-2 pt-4">Login</h1>
+            <form class="login-form | flex flex-col justify-center items-center gap-4 my-auto" method="POST">
+                {% csrf_token %}
+                <div class="username flex justify-center">
+                    <input
+                    type="text"
+                    placeholder="Username"
+                    name="username"
+                    id="username"
+                    class="input-fields"
+                    required
+                    />
+                </div>
+                <div class="password flex justify-center">
+                    <input
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    id="password"
+                    class="input-fields"
+                    required
+                    />
+                </div>
+                <button class="btn" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

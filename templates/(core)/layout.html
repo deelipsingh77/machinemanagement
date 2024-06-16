@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    <script src="{% static "js/navbar.js" %}" defer></script>
+</head>
+<body class="dark:bg-gray-900 dark-transition">
+    <header>
+        {% include "components/navbar.html" %}
+    </header>
+    <aside>
+        {% include "components/sidebar.html" %}
+    </aside>
+    <main class="container pt-16 pl-64">
+        {% block content %}{% endblock content %}
+    </main>
+</body>
+</html>

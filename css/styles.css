@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+  .input-fields {
+    @apply p-2 w-full rounded-lg border-2 border-gray-300;
+  }
+
+  .btn {
+    @apply p-2 w-[80%] rounded-lg bg-blue-500 text-white hover:bg-blue-700;
+  }
+}
+
+@layer utilities {
+  .dark-transition {
+    @apply transition-colors duration-1000 ease-in-out;
+  }
+}

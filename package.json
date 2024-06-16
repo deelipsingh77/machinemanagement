@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build": "npx tailwindcss -i ./css/styles.css -o ./static/css/styles.css --watch",
+    "dev": "py manage.py runserver"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.4"
+  }
+}
