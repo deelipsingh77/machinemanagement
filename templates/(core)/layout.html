@@ -7,6 +7,7 @@
     <title>{% block title %}{% endblock title %}</title>
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
     <script src="{% static "js/navbar.js" %}" defer></script>
+    <script src="https://kit.fontawesome.com/0ccd97a603.js" crossorigin="anonymous"></script>
 </head>
     <body class="dark:bg-gray-900">
         <header>
@@ -20,5 +21,14 @@
                 {% block content %}{% endblock content %}
             </div>
         </main>
+        <script>
+            function removePart(element) {
+                // Find the closest parent div with the class 'flex' and remove it
+                var parentDiv = element.closest('div.flex');
+                if (parentDiv) {
+                    parentDiv.remove();
+                }
+            }
+        </script>
     </body>
 </html>

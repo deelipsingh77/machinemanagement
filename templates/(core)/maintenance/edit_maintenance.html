@@ -1,0 +1,82 @@
+{% extends "(core)/layout.html" %}
+
+{% block title %}Edit Maintenance{% endblock title %}
+
+{% block content %}
+<div class="w-full h-full flex justify-center items-center">
+    <div class="min-w-[60%] p-8 space-y-4 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+        <h1 class="dark:text-white text-3xl font-bold">Edit Maintenance Record</h1>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="machine" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Machine:</label>
+                <select name="machine" id="machine" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-gray-200">
+                    {% for machine in machines %}
+                    <option value="{{ machine.id }}" {% if machine.id == maintenance.machine.id %}selected{% endif %}>{{ machine.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="parts" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Parts Used:</label>
+                <select id="parts" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-gray-200">
+                    <option value="">Select a part</option>
+                    {% for part in parts %}
+                    <option value="{{ part.id }}">{{ part.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="selectedParts" class="mt-2 flex gap-2">
+                {% for part in maintenance.parts_used.all %}
+                <div class="flex items-center justify-between p-2 bg-gray-200 dark:bg-gray-600 rounded-md mb-2" data-part-id="{{ part.id }}">
+                    <p class="text-sm text-gray-700 dark:text-gray-200">{{ part.name }}</p>
+                    <button type="button" class="text-sm text-red-500 hover:text-red-700" onclick="removePart(this);">×</button>
+                    <input type="hidden" name="parts" value="{{ part.id }}">
+                </div>
+                {% endfor %}
+            </div>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Description:</label>
+                <textarea name="description" id="description" rows="3" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-gray-200">{{ maintenance.description }}</textarea>
+            </div>
+            <div>
+                <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Date:</label>
+                <input type="date" name="date" id="date" value="{{ maintenance.date|date:'Y-m-d' }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-gray-200">
+            </div>
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600">Save Changes</button>
+        </form>
+    </div>
+</div>
+<script>
+    document.getElementById('parts').addEventListener('change', function() {
+        const partId = this.value;
+        const partName = this.options[this.selectedIndex].text;
+
+        // Check if the part is already added
+        if (partId && !document.querySelector(`input[name="parts"][value="${partId}"]`)) {
+            const selectedContainer = document.getElementById('selectedParts');
+            const partElement = document.createElement('div');
+            partElement.setAttribute('class', 'flex items-center justify-between p-2 bg-gray-200 dark:bg-gray-600 rounded-md mb-2');
+            partElement.innerHTML = `
+                <p class="text-sm text-gray-700 dark:text-gray-200">${partName}</p>
+                <button type="button" class="text-sm text-red-500 hover:text-red-700" onclick="this.parentNode.remove(); this.previousElementSibling.remove();">×</button>
+            `;
+            selectedContainer.appendChild(partElement);
+
+            // Create a hidden input for the selected part
+            const hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'parts');
+            hiddenInput.setAttribute('value', partId);
+            // Insert the hidden input before the part element (visual representation)
+            selectedContainer.insertBefore(hiddenInput, partElement);
+        } else {
+            // Optionally, alert the user that the part is already added
+            alert("This part has already been added.");
+        }
+
+
+        // Reset the select dropdown
+        this.selectedIndex = 0;
+    });
+</script>
+{% endblock content %}

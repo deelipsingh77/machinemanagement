@@ -4,16 +4,16 @@ from .models import Machine, Part, Maintenance
 @admin.register(Machine)
 class MachineAdmin(admin.ModelAdmin):
     list_display = ('name', 'serial_number', 'price')
-    search_fields = ('name', 'serial_number')
+    search_fields = ('name', 'serial_number', 'price')
 
 @admin.register(Part)
 class PartAdmin(admin.ModelAdmin):
-    list_display = ('name', 'part_number', 'price')
-    search_fields = ('name', 'part_number')
+    list_display = ('name', 'part_number', 'price', 'quantity')
+    search_fields = ('name', 'part_number', 'price', 'quantity')
 
 @admin.register(Maintenance)
 class MaintenanceAdmin(admin.ModelAdmin):
-    list_display = ('machine', 'date', 'get_parts_used', 'description')
+    list_display = ('machine', 'date', 'get_parts_used', 'description', 'maintenance_cost')
     list_filter = ('machine', 'date')
     search_fields = ('machine__name', 'description')
 

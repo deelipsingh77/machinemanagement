@@ -1,0 +1,40 @@
+{% extends "(core)/layout.html" %}
+
+{% block title %}Edit Machine{% endblock title %}
+
+{% block content %}
+    <div class="w-full h-full flex justify-center items-center">
+        <div class="w-[70%] dark:bg-gray-800 bg-slate-200 p-8 rounded shadow-xl">
+            <h2 class="text-2xl font-semibold dark:text-white mb-6">Edit Machine</h2>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+
+                <!-- Name -->
+                <div class="flex flex-col">
+                    <label for="name" class="text-sm font-medium dark:text-white">Name</label>
+                    <input type="text" id="name" name="name" value="{{ machine.name }}" placeholder="Enter name..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                </div>
+
+                <!-- Description -->
+                <div class="flex flex-col">
+                    <label for="description" class="text-sm font-medium dark:text-white">Description</label>
+                    <textarea id="description" name="description" placeholder="Enter description..." rows="3" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">{{ machine.description }}</textarea>
+                </div>
+
+                <!-- Serial Number -->
+                <div class="flex flex-col">
+                    <label for="serial_number" class="text-sm font-medium dark:text-white">Serial Number</label>
+                    <input type="text" id="serial_number" name="serial_number" value="{{ machine.serial_number }}" placeholder="Enter serial number..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                </div>
+
+                <!-- Price -->
+                <div class="flex flex-col">
+                    <label for="price" class="text-sm font-medium dark:text-white">Price</label>
+                    <input type="text" id="price" name="price" value="{{ machine.price }}" placeholder="Enter price..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                </div>
+
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Changes</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

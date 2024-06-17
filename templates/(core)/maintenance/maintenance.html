@@ -1,0 +1,19 @@
+{% extends "(core)/layout.html" %}
+
+{% block title %}Maintenance{% endblock title %}
+
+{% block content %}
+    <div class="w-full sm:w-fit flex justify-center items-center gap-8 mt-4 sm:ml-4">
+        <a href="{% url "add_maintenance" %}">
+            <button
+                class="px-8 py-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-md"
+            >Add <br> Maintenance <br> Record</button>
+        </a>
+
+        <a href="{% url "maintenance_list" %}">
+            <button
+                class="px-8 py-4 bg-orange-500 hover:bg-orange-700 text-white font-bold rounded-2xl shadow-md"
+            >View <br> Maintenance <br> Record</button>
+        </a>
+    </div>
+{% endblock content %}

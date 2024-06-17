@@ -1,9 +1,9 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
-from core.models import Machine, Part
+from core.models import Machine, Maintenance, Part
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 @login_required(login_url='login')
 def home(_):
@@ -68,6 +68,27 @@ def machines_list(request):
         machines = Machine.objects.all()
     return render(request, '(core)/machines/machines_list.html', {'machines': machines})
 
+
+@login_required(login_url='login')
+def delete_machine(request, id):
+    machine = Machine.objects.get(id=id)
+    machine.delete()
+    return redirect('machines_list')
+
+@login_required(login_url='login')
+def edit_machine(request, id):
+    machine = Machine.objects.get(id=id)
+    if request.method == 'POST':
+        machine.name = request.POST.get('name')
+        machine.description = request.POST.get('description')
+        machine.serial_number = request.POST.get('serial_number')
+        machine.price = request.POST.get('price')
+        machine.quantity = request.POST.get('quantity')
+        machine.save()
+        return redirect('machines_list')
+    return render(request, '(core)/machines/edit_machine.html', {'machine': machine})
+
+
 @login_required(login_url='login')
 def add_part(request):
     if request.method == 'POST':
@@ -75,8 +96,9 @@ def add_part(request):
         description = request.POST.get('description')
         part_number = request.POST.get('part_number')
         price = request.POST.get('price')
+        quantity = request.POST.get('quantity')
 
-        Part.objects.create(name=name, description=description, part_number=part_number, price=price)
+        Part.objects.create(name=name, description=description, part_number=part_number, price=price, quantity=int(quantity))
         
         return redirect('parts_list')
     return render(request, '(core)/parts/add_part.html')
@@ -94,3 +116,109 @@ def parts_list(request):
     else:
         parts = Part.objects.all()
     return render(request, '(core)/parts/parts_list.html', {'parts': parts})
+
+@login_required(login_url='login')
+def delete_part(request, id):
+    part = Part.objects.get(id=id)
+    part.delete()
+    return redirect('parts_list')
+
+@login_required(login_url='login')
+def edit_part(request, id):
+    part = Part.objects.get(id=id)
+    if request.method == 'POST':
+        part.name = request.POST.get('name')
+        part.description = request.POST.get('description')
+        part.part_number = request.POST.get('part_number')
+        part.price = request.POST.get('price')
+        part.quantity = request.POST.get('quantity')
+        part.save()
+        return redirect('parts_list')
+    return render(request, '(core)/parts/edit_part.html', {'part': part})
+
+@login_required(login_url='login')
+def maintenance_page(request):
+    return render(request, '(core)/maintenance/maintenance.html')
+
+@login_required(login_url='login')
+def add_maintenance(request):
+    if request.method == 'POST':
+        machine_id = request.POST.get('machine')
+        parts_ids = request.POST.getlist('parts')
+        description = request.POST.get('description')
+        date = request.POST.get('date')
+
+        machine = Machine.objects.get(id=machine_id)
+        parts = Part.objects.filter(id__in=parts_ids)
+        
+        total_cost = parts.aggregate(total_price=Sum('price'))['total_price'] or 0
+
+        maintenance = Maintenance.objects.create(
+            machine=machine,
+            description=description,
+            date=date,
+            maintenance_cost=total_cost
+        )
+        maintenance.parts_used.set(parts)
+        maintenance.save()
+
+        return redirect('maintenance_list')
+
+    else:
+        machines = Machine.objects.all()
+        parts = Part.objects.all()
+        return render(request, '(core)/maintenance/add_maintenance.html', {'machines': machines, 'parts': parts})
+
+@login_required(login_url='login')
+def maintenance_list(request):
+    search_query = request.GET.get('search', '')
+    if search_query:
+        maintenance_records = Maintenance.objects.filter(
+            Q(machine__name__icontains=search_query) | 
+            Q(description__icontains=search_query) | 
+            Q(date__icontains=search_query) | 
+            Q(maintenance_cost__icontains=search_query)
+        ).prefetch_related('parts_used')
+    else:
+        maintenance_records = Maintenance.objects.all().prefetch_related('parts_used')
+
+    # Calculate the number of parts used for each maintenance record
+    for record in maintenance_records:
+        record.parts_count = record.parts_used.count()
+
+    return render(request, '(core)/maintenance/maintenance_list.html', {'maintenance': maintenance_records})
+
+@login_required(login_url='login')
+def delete_maintenance(request, id):
+    maintenance = Maintenance.objects.get(id=id)
+    maintenance.delete()
+    return redirect('maintenance_list')
+
+@login_required(login_url='login')
+def edit_maintenance(request, id):
+    maintenance = Maintenance.objects.get(id=id)
+    if request.method == 'POST':
+        machine_id = request.POST.get('machine')
+        parts_ids = request.POST.getlist('parts')
+        description = request.POST.get('description')
+        date = request.POST.get('date')
+
+        machine = Machine.objects.get(id=machine_id)
+        parts = Part.objects.filter(id__in=parts_ids)
+        
+        total_cost = parts.aggregate(total_price=Sum('price'))['total_price'] or 0
+
+        maintenance.machine = machine
+        maintenance.description = description
+        maintenance.date = date
+        maintenance.maintenance_cost = total_cost
+        maintenance.save()
+        maintenance.parts_used.set(parts)
+
+        return redirect('maintenance_list')
+
+    else:
+        machines = Machine.objects.all()
+        parts = Part.objects.all()
+        return render(request, '(core)/maintenance/edit_maintenance.html', {'maintenance': maintenance, 'machines': machines, 'parts': parts})
+    
