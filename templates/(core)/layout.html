@@ -8,15 +8,17 @@
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
     <script src="{% static "js/navbar.js" %}" defer></script>
 </head>
-<body class="dark:bg-gray-900 dark-transition">
-    <header>
-        {% include "components/navbar.html" %}
-    </header>
-    <aside>
-        {% include "components/sidebar.html" %}
-    </aside>
-    <main class="container pt-16 pl-64">
-        {% block content %}{% endblock content %}
-    </main>
-</body>
+    <body class="dark:bg-gray-900 dark-transition">
+        <header>
+            {% include "components/navbar.html" %}
+        </header>
+        <main class="container grid sm:grid-cols-12 grid-cols-8">
+            <aside class="sm:col-span-4 md:col-span-3 col-span-1 h-screen">
+                {% include "components/sidebar.html" %}
+            </aside>
+            <div class="sm:col-span-8 md:col-span-9 col-span-7"> 
+                {% block content %}{% endblock content %}
+            </div>
+        </main>
+    </body>
 </html>
