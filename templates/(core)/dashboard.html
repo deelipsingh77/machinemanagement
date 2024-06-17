@@ -3,5 +3,61 @@
 {% block title %}Dashboard{% endblock title %}
 
 {% block content %}
-    <h1 class="dark:text-white">Dashboard</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Dashboard</h1>
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Total Machines Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+            <div class="flex items-center">
+                <div class="p-3 bg-blue-500 text-white rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v3m0 12v3m7.5-15l-2.1 2.1m-10.8 0L4.5 6M21 12h-3m-12 0H3m15.9 3l2.1 2.1m-10.8 0l-2.1 2.1M12 6a6 6 0 100 12 6 6 0 000-12z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ total_machines }}</h2>
+                    <div class="text-gray-500 dark:text-gray-400">Total Machines</div>
+                </div>
+            </div>
+        </div>
+        <!-- Total Parts Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+            <div class="flex items-center">
+                <div class="p-3 bg-green-500 text-white rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m-6 4V6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 00-2 2v2z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ total_parts }}</h2>
+                    <div class="text-gray-500 dark:text-gray-400">Total Parts</div>
+                </div>
+            </div>
+        </div>
+        <!-- Machines Value Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+            <div class="flex items-center">
+                <div class="p-3 bg-yellow-500 text-white rounded-full">
+                    <!-- Icon -->
+                </div>
+                <div class="ml-4">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ machines_value }}</h2>
+                    <div class="text-gray-500 dark:text-gray-400">Machines Value</div>
+                </div>
+            </div>
+        </div>
+        <!-- Parts Value Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+            <div class="flex items-center">
+                <div class="p-3 bg-red-500 text-white rounded-full">
+                    <!-- Icon -->
+                </div>
+                <div class="ml-4">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ parts_value }}</h2>
+                    <div class="text-gray-500 dark:text-gray-400">Parts Value</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

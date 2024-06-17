@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
     <script src="{% static "js/navbar.js" %}" defer></script>
 </head>
-    <body class="dark:bg-gray-900 dark-transition">
+    <body class="dark:bg-gray-900">
         <header>
             {% include "components/navbar.html" %}
         </header>
         <main class="container grid grid-cols-12">
-            <aside class="sm:col-span-4 md:col-span-3 col-span-2 h-screen">
+            <aside class="sm:col-span-4 md:col-span-3 lg:col-span-2 col-span-2 h-[calc(100vh-60px)]">
                 {% include "components/sidebar.html" %}
             </aside>
-            <div class="sm:col-span-8 md:col-span-9 col-span-10"> 
+            <div class="sm:col-span-8 md:col-span-9 lg:col-span-10 col-span-10"> 
                 {% block content %}{% endblock content %}
             </div>
         </main>

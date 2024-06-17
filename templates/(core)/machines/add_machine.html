@@ -1,0 +1,43 @@
+{% extends "(core)/layout.html" %}
+
+{% block title %}Add Machine{% endblock title %}
+
+{% block content %}
+    <div class="w-full h-full flex justify-center items-center">
+        <div class="w-[70%] dark:bg-gray-800 bg-slate-200 p-8 rounded shadow-xl">
+            <h2 class="text-2xl font-semibold dark:text-white mb-6">Add Machine</h2>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+
+                <!-- Name -->
+                <div class="flex flex-col">
+                    <label for="name" class="text-sm font-medium dark:text-white">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter name..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" required>
+                </div>
+
+                <!-- Description -->
+                <div class="flex flex-col">
+                    <label for="description" class="text-sm font-medium dark:text-white">Description</label>
+                    <textarea id="description" name="description" placeholder="Enter description..." rows="3" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400"></textarea>
+                </div>
+
+                <!-- Serial Number -->
+                <div class="flex flex-col">
+                    <label for="serial_number" class="text-sm font-medium dark:text-white">Serial Number</label>
+                    <input type="text" id="serial_number" name="serial_number" placeholder="Enter serial number..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                </div>
+
+                <!-- Price -->
+                <div class="flex flex-col">
+                    <label for="price" class="text-sm font-medium dark:text-white">Price</label>
+                    <input type="number" step="0.01" id="price" name="price" placeholder="Enter price..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end mt-4">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold rounded">Add Machine</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

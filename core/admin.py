@@ -1,22 +1,22 @@
 from django.contrib import admin
+from .models import Machine, Part, Maintenance
 
-from core.models import Machine, MaintenanceTask, Part
-
-# Register your models here.
 @admin.register(Machine)
 class MachineAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'description')
-    search_fields = ('name', 'description')
-    list_filter = ('name',)
-
-@admin.register(MaintenanceTask)
-class MaintenanceTaskAdmin(admin.ModelAdmin):
-    list_display = ('id', 'machine', 'task_name', 'scheduled_date', 'completed')
-    list_filter = ('machine', 'scheduled_date', 'completed')
-    search_fields = ('machine__name', 'task_name')
+    list_display = ('name', 'serial_number', 'price')
+    search_fields = ('name', 'serial_number')
 
 @admin.register(Part)
 class PartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'description', 'quantity')
-    search_fields = ('name', 'description')
-    list_filter = ('name',)
+    list_display = ('name', 'part_number', 'price')
+    search_fields = ('name', 'part_number')
+
+@admin.register(Maintenance)
+class MaintenanceAdmin(admin.ModelAdmin):
+    list_display = ('machine', 'date', 'get_parts_used', 'description')
+    list_filter = ('machine', 'date')
+    search_fields = ('machine__name', 'description')
+
+    def get_parts_used(self, obj):
+        return ", ".join([part.name for part in obj.parts_used.all()])
+    get_parts_used.short_description = 'Parts Used'

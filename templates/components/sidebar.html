@@ -1,7 +1,7 @@
-<div class="w-full h-full dark:bg-gray-800 bg-blue-400 z-0">
+<div class="w-full h-full dark:bg-gray-800 bg-blue-400 z-0 dark-transition">
   <div class="flex flex-col items-start justify-start h-full py-4">
     <a
-      href="#"
+      href="{% url "dashboard" %}"
       class="flex justify-center sm:justify-normal items-center px-6 py-2 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
     >
       <svg
@@ -23,7 +23,7 @@
       </span>
     </a>
     <a
-      href="#"
+      href="{% url "machines" %}"
       class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
     >
       <svg
@@ -41,11 +41,11 @@
         ></path>
       </svg>
       <span class="hidden sm:inline">
-        Posts
+        Machines
       </span>
     </a>
     <a
-      href="#"
+      href="{% url "parts" %}"
       class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
     >
       <svg
@@ -63,7 +63,7 @@
         ></path>
       </svg>
       <span class="hidden sm:inline">
-        Users
+        Parts
       </span>
     </a>
     <!-- Add more sidebar items as needed -->

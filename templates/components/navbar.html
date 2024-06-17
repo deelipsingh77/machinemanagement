@@ -1,11 +1,12 @@
 <nav class="bg-blue-500 dark:bg-slate-700 p-4 sticky w-full z-10 dark-transition">
   <div class="container mx-auto flex justify-between items-center">
     <a href="#" class="text-white text-xl font-bold">Maintenance Management</a>
-    <div class="hidden md:flex space-x-4">
+    <div class="hidden md:flex sm:items-center space-x-4">
       <a href="#" class="text-white">Home</a>
       <a href="#" class="text-white">About</a>
       <a href="#" class="text-white">Services</a>
       <a href="#" class="text-white">Contact</a>
+      <a href="{% url "logout" %}"><button class="bg-red-500 text-white px-4  py-2 rounded-xl">Logout</button></a>
       {% include "components/toggle-switch.html" %}
     </div>
     <div class="md:hidden flex justify-center gap-2">
@@ -36,4 +37,5 @@
   <a href="#" class="block text-white py-2 px-4 w-full hover:bg-gray-300 hover:text-gray-800">About</a>
   <a href="#" class="block text-white py-2 px-4 w-full hover:bg-gray-300 hover:text-gray-800">Services</a>
   <a href="#" class="block text-white py-2 px-4 w-full hover:bg-gray-300 hover:text-gray-800">Contact</a>
+  <a href="{% url "logout" %}" class="block text-white py-2 px-4 w-full hover:bg-gray-300 hover:text-gray-800">Log Out</a>
 </div>
