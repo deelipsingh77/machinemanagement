@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
 from core.models import Machine, Maintenance, Part
-from django.db import models
-from django.db.models import Q, Sum
+from django.db import models, transaction
+from django.db.models import Q, Sum, F
 
 @login_required(login_url='login')
 def home(_):
@@ -15,14 +15,19 @@ def dashboard(request):
     total_machines = Machine.objects.count()
     
     # Count the total number of parts
-    total_parts = Part.objects.count()
+    total_parts = Part.objects.aggregate(total_quantity=Sum('quantity'))['total_quantity']
+    total_parts = total_parts if total_parts is not None else 0
     
     # Calculate the total value of all machines
     machines_value = Machine.objects.aggregate(total_value=models.Sum('price'))['total_value']
     machines_value = machines_value if machines_value is not None else 0
     
     # Calculate the total value of all parts
-    parts_value = Part.objects.aggregate(total_value=models.Sum('price'))['total_value']
+    parts_value = Part.objects.annotate(
+        total_price_per_part=F('price') * F('quantity')
+    ).aggregate(
+        total_value=Sum('total_price_per_part')
+    )['total_value']
     parts_value = parts_value if parts_value is not None else 0
     
     context = {
@@ -149,7 +154,7 @@ def add_maintenance(request):
         date = request.POST.get('date')
 
         machine = Machine.objects.get(id=machine_id)
-        parts = Part.objects.filter(id__in=parts_ids)
+        parts = Part.objects.filter(id__in=parts_ids, quantity__gt=0)
         
         total_cost = parts.aggregate(total_price=Sum('price'))['total_price'] or 0
 
@@ -162,11 +167,15 @@ def add_maintenance(request):
         maintenance.parts_used.set(parts)
         maintenance.save()
 
+        for part in parts:
+            part.quantity -= 1
+            part.save()
+
         return redirect('maintenance_list')
 
     else:
         machines = Machine.objects.all()
-        parts = Part.objects.all()
+        parts = Part.objects.filter(quantity__gt=0)
         return render(request, '(core)/maintenance/add_maintenance.html', {'machines': machines, 'parts': parts})
 
 @login_required(login_url='login')
@@ -204,21 +213,40 @@ def edit_maintenance(request, id):
         date = request.POST.get('date')
 
         machine = Machine.objects.get(id=machine_id)
-        parts = Part.objects.filter(id__in=parts_ids)
+        parts = Part.objects.filter(id__in=parts_ids, quantity__gt=0)
         
         total_cost = parts.aggregate(total_price=Sum('price'))['total_price'] or 0
+
+        with transaction.atomic():
+            # Get the current parts associated with the maintenance record
+            current_parts = maintenance.parts_used.all()
+
+            # Increase the quantity for parts that are removed
+            removed_parts = current_parts.exclude(id__in=parts_ids)
+            for part in removed_parts:
+                part.quantity += 1
+                part.save()
+
+            # Identify newly added parts
+            current_parts_ids = current_parts.values_list('id', flat=True)
+            newly_added_parts = parts.exclude(id__in=current_parts_ids)
+
+            # Decrease the quantity for newly added parts
+            for part in newly_added_parts:
+                part.quantity -= 1
+                part.save()
 
         maintenance.machine = machine
         maintenance.description = description
         maintenance.date = date
         maintenance.maintenance_cost = total_cost
-        maintenance.save()
         maintenance.parts_used.set(parts)
+        maintenance.save()
 
         return redirect('maintenance_list')
 
     else:
         machines = Machine.objects.all()
-        parts = Part.objects.all()
+        parts = Part.objects.filter(quantity__gt=0)
         return render(request, '(core)/maintenance/edit_maintenance.html', {'maintenance': maintenance, 'machines': machines, 'parts': parts})
     
