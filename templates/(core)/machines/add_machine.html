@@ -6,25 +6,62 @@
     <div class="w-full h-full flex justify-center items-center">
         <div class="w-[70%] dark:bg-gray-800 bg-slate-200 p-8 rounded shadow-xl">
             <h2 class="text-2xl font-semibold dark:text-white mb-6">Add Machine</h2>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="text-red-600">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
             <form method="post" class="space-y-4">
                 {% csrf_token %}
 
-                <!-- Name -->
+                <!-- Machine Number -->
                 <div class="flex flex-col">
-                    <label for="name" class="text-sm font-medium dark:text-white">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter name..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" required>
+                    <label for="machine_no" class="text-sm font-medium dark:text-white">Machine Number</label>
+                    <input type="text" id="machine_no" name="machine_no" placeholder="Enter machine number..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" required>
                 </div>
 
-                <!-- Description -->
+                <!-- Machine Name -->
                 <div class="flex flex-col">
-                    <label for="description" class="text-sm font-medium dark:text-white">Description</label>
-                    <textarea id="description" name="description" placeholder="Enter description..." rows="3" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400"></textarea>
+                    <label for="machine_name" class="text-sm font-medium dark:text-white">Machine Name</label>
+                    <input type="text" id="machine_name" name="machine_name" placeholder="Enter machine name..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" required>
                 </div>
 
-                <!-- Serial Number -->
+                <!-- Purchase Date -->
                 <div class="flex flex-col">
-                    <label for="serial_number" class="text-sm font-medium dark:text-white">Serial Number</label>
-                    <input type="text" id="serial_number" name="serial_number" placeholder="Enter serial number..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <label for="purchase_date" class="text-sm font-medium dark:text-white">Purchase Date</label>
+                    <input type="date" id="purchase_date" name="purchase_date" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                </div>
+
+                <div class="flex w-full">
+                    <!-- Warranty Years -->
+                    <div class="flex flex-col w-full">
+                        <label for="warranty_years" class="text-sm font-medium dark:text-white">Warranty Years</label>
+                        <input type="number" id="warranty_years" name="warranty_years" min="0" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty years...">
+                    </div>
+
+                    <!-- Warranty Months -->
+                    <div class="flex flex-col w-full">
+                        <label for="warranty_months" class="text-sm font-medium dark:text-white">Warranty Months</label>
+                        <input type="number" id="warranty_months" name="warranty_months" min="0" max="11" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty months...">
+                    </div>
+                </div>
+
+                <!-- Shelf Life -->
+                <div class="flex flex-col">
+                    <label for="shelf_life" class="text-sm font-medium dark:text-white">Shelf Life</label>
+                    <input type="text" id="shelf_life" name="shelf_life" placeholder="Enter shelf life..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                </div>
+
+                <!-- Location -->
+                <div class="flex flex-col">
+                    <label for="location" class="text-sm font-medium dark:text-white">Location</label>
+                    <select id="location" name="location" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                        {% for location in locations %}
+                        <option value="{{ location.id }}">{{ location.location }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
 
                 <!-- Price -->

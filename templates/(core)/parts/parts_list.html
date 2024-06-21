@@ -18,16 +18,25 @@
                 <thead>
                     <tr>
                         <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
-                            Name
-                        </th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
-                            Description
-                        </th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
                             Part Number
                         </th>
                         <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                            Part Name
+                        </th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                            Purchase Date
+                        </th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                            Warranty End Date
+                        </th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                            Shelf Life
+                        </th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
                             Quantity
+                        </th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                            Location
                         </th>
                         <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
                             Price
@@ -44,22 +53,31 @@
                     {% for part in parts %}
                     <tr class="hover:bg-gray-50">
                         <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">
+                            <p class="text-gray-700 dark:text-white whitespace-no-wrap">{{ part.part_no }}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">
                             <div class="flex items-center">
                                 <div class="ml-3">
                                     <p class="text-gray-900 dark:text-white whitespace-no-wrap">
-                                        {{ part.name }}
+                                        {{ part.part_name }}
                                     </p>
                                 </div>
                             </div>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">
-                            <p class="text-gray-700 dark:text-white whitespace-no-wrap">{{ part.description }}</p>
+                            <p class="text-gray-700 dark:text-white whitespace-no-wrap">{{ part.purchase_date }}</p>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">
-                            <p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ part.part_number }}</p>
+                            <p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ part.part_warranty }}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">
+                            <p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ part.shelf_life }}</p>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">
                             <p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ part.quantity|floatformat:"0" }}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">
+                            <p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ part.location }}</p>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">
                             <p class="text-gray-900 dark:text-white whitespace-no-wrap">₹ {{ part.price|floatformat:"0" }}</p>

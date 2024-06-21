@@ -15,5 +15,17 @@
                 class="h-20 w-32 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
             >View Machines</button>
         </a>
+
+        <a href="{% url "mapping" %}">
+            <button
+                class="h-20 w-32 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
+            >Map Machine Parts</button>
+        </a>
+
+        <a href="{% url "mapping_list" %}">
+            <button
+                class="h-20 w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
+            >Machine Parts List</button>
+        </a>
     </div>
 {% endblock content %}

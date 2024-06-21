@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 
-{% block title %}Login{% endblock title %} 
+{% block title %}Login{% endblock title %}
+
 {% block content %}
-    <div class="login-container | h-screen flex justify-center items-center w-screen">
-        <div class="shadow-2xl min-h-80 rounded-2xl min-w-64 flex flex-col ">
-            <h1 class="text-center text-4xl font-bold p-2 pt-4">Login</h1>
+    <div class="login-container | flex justify-center items-center w-full h-[calc(100vh-72px)]">
+        <div class="shadow-2xl min-h-80 rounded-2xl min-w-64 flex flex-col bg-white dark:bg-gray-800">
+            <h1 class="text-center text-4xl font-bold p-2 pt-4 dark:text-white">Login</h1>
             <form class="login-form | flex flex-col justify-center items-center gap-4 my-auto" method="POST">
                 {% csrf_token %}
                 <div class="username flex justify-center">
@@ -13,7 +14,7 @@
                     placeholder="Username"
                     name="username"
                     id="username"
-                    class="input-fields"
+                    class="input-fields bg-gray-100 dark:bg-gray-700 dark:text-white"
                     required
                     />
                 </div>
@@ -23,11 +24,11 @@
                     placeholder="Password"
                     name="password"
                     id="password"
-                    class="input-fields"
+                    class="input-fields bg-gray-100 dark:bg-gray-700 dark:text-white"
                     required
                     />
                 </div>
-                <button class="btn" type="submit">Login</button>
+                <button class="btn bg-blue-500 text-white dark:bg-blue-700" type="submit">Login</button>
             </form>
         </div>
     </div>
