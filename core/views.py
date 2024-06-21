@@ -216,15 +216,15 @@ def machine_mapping(request):
     if request.method == 'POST':
         machine_id = request.POST.get('machine')
         parts_ids = request.POST.getlist('part')
-        location_id = request.POST.get('location')
+        # location_id = request.POST.get('location')
         
         machine = Machine.objects.get(id=machine_id)
-        location = Location.objects.get(id=location_id)
+        # location = Location.objects.get(id=location_id)
         for part_id in parts_ids:
             part = Part.objects.get(id=part_id)
-            MachinePart.objects.create(machine=machine, part=part, location=location)
+            MachinePart.objects.create(machine=machine, part=part, location=machine.location)
         
-        return redirect('/dashboard/')
+        return redirect('mapping_list')
 
     else:
         machines = Machine.objects.all()
@@ -233,26 +233,32 @@ def machine_mapping(request):
         context = {
             'machines': machines,
             'parts': parts,
-            'locations': locations,
+            # 'locations': locations,
         }
         return render(request, '(core)/machines/mapping.html', context)
 
 @login_required(login_url='login')
 def machine_mapping_list(request):
-    machine_parts = MachinePart.objects.select_related('machine', 'part', 'location').all()
-    machine_data = {}
+    # machine_parts = MachinePart.objects.select_related('machine', 'part', 'location').all()
+    # machine_data = {}
 
-    for mp in machine_parts:
-        key = (mp.machine.machine_name, mp.location.location)
-        if key not in machine_data:
-            machine_data[key] = {
-                'machine_name': mp.machine.machine_name,
-                'location': mp.location.location,
-                'parts': []
-            }
-        machine_data[key]['parts'].append(mp.part.part_name)
+    # for mp in machine_parts:
+    #     key = (mp.machine.machine_name, mp.location.location)
+    #     if key not in machine_data:
+    #         machine_data[key] = {
+    #             'machine_name': mp.machine.machine_name,
+    #             'location': mp.location.location,
+    #             'parts': []
+    #         }
+    #     machine_data[key]['parts'].append(mp.part.part_name)
 
-    return render(request, '(core)/machines/mapping_list.html', {'machine_data': machine_data.values()})
+    # return render(request, '(core)/machines/mapping_list.html', {'machine_data': machine_data.values()})
+
+    
+    machines = Machine.objects.all()
+    return render(request, '(core)/machines/mapping_list.html', {
+        'machines': machines,
+    })
 
 @login_required(login_url='login')
 def maintenance_page(request):

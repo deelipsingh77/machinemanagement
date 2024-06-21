@@ -62,20 +62,17 @@ class Ticket(models.Model):
         (COMPLETED, 'Completed'),
     ]
 
-    select_ticket = models.CharField(max_length=200)
+    ticket_no = models.CharField(max_length=100, unique=True)
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
     parts = models.ManyToManyField(Part)
-    aval_qty = models.IntegerField()
-    used_qty = models.IntegerField()
     down_time = models.CharField(max_length=100)
     up_time = models.CharField(max_length=100)
-    issue_list = models.CharField(max_length=200)
-    ticket_status = models.CharField(max_length=100, choices=TICKET_STATUS_CHOICES, default=PENDING)
-    assigned_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    issue_list = models.ForeignKey(Issue, on_delete=models.CASCADE)
     remarks = models.TextField(blank=True, null=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Ticket {self.select_ticket} for {self.machine}"
+        return f"Ticket {self.ticket_no} for {self.machine}"
     
 class TicketResolution(models.Model):
     PENDING = 'Pending'

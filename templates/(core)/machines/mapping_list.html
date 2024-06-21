@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for data in machine_data %}
+                {% comment %} {% for data in machine_data %}
                 <tr>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
                         {{ data.machine_name }}
@@ -33,9 +33,36 @@
                         {{ data.location }}
                     </td>
                 </tr>
+                {% endfor %} {% endcomment %}
+                {% for machine in machines %}
+                <tr data-machine-id="{{ machine.id }}">
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                        {{ machine.machine_name }}
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white parts-placeholder">
+                        <!-- Parts from fetch request-->
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                        {{ machine.location.location }}
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('tr[data-machine-id]').forEach(row => {
+            const machineId = row.getAttribute('data-machine-id');
+            fetch(`/get_parts_for_machine/${machineId}`)
+                .then(response => response.json())
+                .then(parts => {
+                    const partsPlaceholder = row.querySelector('.parts-placeholder');
+                    partsPlaceholder.innerHTML = parts.map(part => part.part_name).join(", ");
+                })
+                .catch(error => console.error('Error loading parts:', error));
+        });
+    });
+</script>
 {% endblock content %}

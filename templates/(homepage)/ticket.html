@@ -1,20 +1,111 @@
 {% extends "layout.html" %}
 
-{% block title %}Ticket{% endblock title %}
+{% block title %}Issue Ticket{% endblock title %}
 
 {% block content %}
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Welcome to Maintenance Management</h2>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">This is a simple maintenance management system built with Django and Tailwind CSS.</p>
-            <a href="{% url "ticket" %}" class="bg-blue-500 text-white px-4 py-2 mt-4 rounded-lg inline-block">Raise a Ticket</a>
-        </div>
-        <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">About</h2>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">This is a simple maintenance management system built with Django and Tailwind CSS.</p>
-            <a href="#" class="bg-blue-500 text-white px-4 py-2 mt-4 rounded-lg inline-block">Learn More</a>
-        </div>
-        </div>
+    <div class="max-w-lg mx-auto mt-8">
+        <h2 class="text-xl font-bold mb-4">Issue Ticket</h2>
+        <form id="issue-ticket-form" method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label for="ticket_no" class="block text-sm font-medium text-gray-700">Ticket Number:</label>
+                <input type="text" id="ticket_no" name="ticket_no" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="machine" class="block text-sm font-medium text-gray-700">Machine:</label>
+                <select id="machine" name="machine" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">Select Machine</option>
+                    {% for machine in machines %}
+                        <option value="{{ machine.id }}">{{ machine.machine_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="parts" class="block text-sm font-medium text-gray-700">Parts:</label>
+                <select id="parts" name="parts[]" multiple required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <!-- Options will be populated via AJAX -->
+                </select>
+            </div>
+
+            <div>
+                <label for="down_time" class="block text-sm font-medium text-gray-700">Down Time:</label>
+                <input type="text" id="down_time" name="down_time" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="up_time" class="block text-sm font-medium text-gray-700">Up Time:</label>
+                <input type="text" id="up_time" name="up_time" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="issue_list" class="block text-sm font-medium text-gray-700">Issue:</label>
+                <select id="issue_list" name="issue_list" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    {% for issue in issues %}
+                        <option value="{{ issue.id }}">{{ issue.issue }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="department" class="block text-sm font-medium text-gray-700">Department:</label>
+                <select id="department" name="department" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    {% for department in departments %}
+                        <option value="{{ department.id }}">{{ department.department }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks:</label>
+                <textarea id="remarks" name="remarks"
+                          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+            </div>
+
+            <button type="submit"
+                    class="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Issue Ticket
+            </button>
+        </form>
     </div>
-{% endblock content %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const machineSelect = document.getElementById('machine');
+            const partsSelect = document.getElementById('parts');
+
+            machineSelect.addEventListener('change', function () {
+                const machineId = this.value;
+                if (machineId) {
+                    fetch(`/get_parts_for_machine/${machineId}/`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            partsSelect.innerHTML = '<option value="">Select Parts</option>';
+                            data.forEach(part => {
+                                partsSelect.innerHTML += `<option value="${part.id}">${part.part_name}</option>`;
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching parts:', error);
+                        });
+                } else {
+                    partsSelect.innerHTML = '<option value="">Select Parts</option>';
+                }
+            });
+        });
+    </script>
+{% endblock %}
