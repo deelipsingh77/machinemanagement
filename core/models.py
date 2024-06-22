@@ -93,4 +93,4 @@ class TicketResolution(models.Model):
     remarks = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"Resolution for Ticket {self.ticket.select_ticket} by {self.resolved_by.username}"
+        return f"Resolution for Ticket {self.ticket.ticket_no} by {self.resolved_by.username}"

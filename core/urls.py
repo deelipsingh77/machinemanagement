@@ -20,11 +20,6 @@ urlpatterns = [
 
     path('tickets/', views.tickets_page, name="tickets_page"),
     path('tickets/tickets_list/', views.tickets_list, name='tickets_list'),
-    path('tickets/resolve_ticket/', views.resolve_ticket, name='resolve_ticket'),
-    
-    path('maintenance/', views.maintenance_page, name='maintenance'),
-    path('maintenance/add_maintenance/', views.add_maintenance, name='add_maintenance'),
-    path('maintenance/maintenance_list/', views.maintenance_list, name='maintenance_list'),
-    path('maintenance/delete_maintenance/<int:id>/', views.delete_maintenance, name='delete_maintenance'),
-    path('maintenance/edit_maintenance/<int:id>/', views.edit_maintenance, name='edit_maintenance'),
+    path('tickets/resolve_tickets/', views.resolve_tickets, name='resolve_tickets'),
+    path('tickets/resolve_ticket/<int:id>/', views.resolve_ticket, name='resolve_ticket'),
 ]

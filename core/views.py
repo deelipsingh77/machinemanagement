@@ -4,8 +4,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
-from core.models import Location, Machine, MachinePart, Part, Ticket
+from core.models import Location, Machine, MachinePart, Part, Ticket, TicketResolution
 from django.db import models, transaction
 from django.db.models import Q, Sum, F
 
@@ -238,21 +239,6 @@ def machine_mapping(request):
 
 @login_required(login_url='login')
 def machine_mapping_list(request):
-    # machine_parts = MachinePart.objects.select_related('machine', 'part', 'location').all()
-    # machine_data = {}
-
-    # for mp in machine_parts:
-    #     key = (mp.machine.machine_name, mp.location.location)
-    #     if key not in machine_data:
-    #         machine_data[key] = {
-    #             'machine_name': mp.machine.machine_name,
-    #             'location': mp.location.location,
-    #             'parts': []
-    #         }
-    #     machine_data[key]['parts'].append(mp.part.part_name)
-
-    # return render(request, '(core)/machines/mapping_list.html', {'machine_data': machine_data.values()})
-
     machines = Machine.objects.all()
     return render(request, '(core)/machines/mapping_list.html', {
         'machines': machines,
@@ -285,13 +271,17 @@ def tickets_list(request):
     return render(request, '(core)/tickets/tickets_list.html', context)
 
 @login_required(login_url='login')
-def resolve_ticket(request):
+def resolve_tickets(request):
     if request.method == 'POST':
         ticket_id = request.POST.get('ticket_id')
         status = request.POST.get('status')
 
         ticket = get_object_or_404(Ticket, id=ticket_id)
         ticket.status = status
+
+        if status == Ticket.COMPLETED:
+            ticket.up_time = timezone.now()  # Set up_time to current time
+
         ticket.save()
 
         parts_used = {key: value for key, value in request.POST.items() if key.startswith('part_') and key.endswith('_used')}
@@ -305,134 +295,62 @@ def resolve_ticket(request):
                 except Part.DoesNotExist:
                     continue
 
+        # Create a new TicketResolution entry
+        TicketResolution.objects.create(
+            ticket=ticket,
+            resolved_by=request.user,
+            resolution_status=status,
+            remarks=request.POST.get('remarks', '')
+        )
+
         # Optionally, add a success message or redirect to another page
-        return redirect('resolve_ticket')  # Redirect to the same page or another as needed
+        return redirect('resolve_tickets')  # Redirect to the same page or another as needed
 
     tickets = Ticket.objects.all()
-    return render(request, '(core)/tickets/resolve_ticket.html', {'tickets': tickets})
-
-
-
-
-
-
-
+    return render(request, '(core)/tickets/resolve_tickets.html', {'tickets': tickets})
 
 @login_required(login_url='login')
-def maintenance_page(request):
-    return render(request, '(core)/maintenance/maintenance.html')
-
-@login_required(login_url='login')
-def add_maintenance(request):
-    # if request.method == 'POST':
-    #     machine_id = request.POST.get('machine')
-    #     parts_ids = request.POST.getlist('parts')
-    #     description = request.POST.get('description')
-    #     date = request.POST.get('date')
-
-    #     machine = Machine.objects.get(id=machine_id)
-    #     parts = Part.objects.filter(id__in=parts_ids, quantity__gt=0)
-        
-    #     total_cost = parts.aggregate(total_price=Sum('price'))['total_price'] or 0
-
-    #     maintenance = Maintenance.objects.create(
-    #         machine=machine,
-    #         description=description,
-    #         date=date,
-    #         maintenance_cost=total_cost
-    #     )
-    #     maintenance.parts_used.set(parts)
-    #     maintenance.save()
-
-    #     for part in parts:
-    #         part.quantity -= 1
-    #         part.save()
-
-    #     return redirect('maintenance_list')
-
-    # else:
-    #     machines = Machine.objects.all()
-    #     parts = Part.objects.filter(quantity__gt=0)
-    # context = {
-    #     'machines': machines
-    # }
-    context = {}
-    return render(request, '(core)/maintenance/add_maintenance.html')
-
-@login_required(login_url='login')
-def maintenance_list(request):
-    # search_query = request.GET.get('search', '')
-    # if search_query:
-    #     maintenance_records = Maintenance.objects.filter(
-    #         Q(machine__name__icontains=search_query) | 
-    #         Q(description__icontains=search_query) | 
-    #         Q(date__icontains=search_query) | 
-    #         Q(maintenance_cost__icontains=search_query)
-    #     ).prefetch_related('parts_used')
-    # else:
-    #     maintenance_records = Maintenance.objects.all().prefetch_related('parts_used')
-
-    # # Calculate the number of parts used for each maintenance record
-    # for record in maintenance_records:
-    #     record.parts_count = record.parts_used.count()
-
-    # context = {
-    #     'maintenance': maintenance_records
-    # }
-    context = {} 
-    return render(request, '(core)/maintenance/maintenance_list.html', context)
-
-@login_required(login_url='login')
-def delete_maintenance(request, id):
-    # maintenance = Maintenance.objects.get(id=id)
-    # maintenance.delete()
-    return redirect('maintenance_list')
-
-@login_required(login_url='login')
-def edit_maintenance(request, id):
-    # maintenance = Maintenance.objects.get(id=id)
-    # if request.method == 'POST':
-    #     machine_id = request.POST.get('machine')
-    #     parts_ids = request.POST.getlist('parts')
-    #     description = request.POST.get('description')
-    #     date = request.POST.get('date')
-
-    #     machine = Machine.objects.get(id=machine_id)
-    #     parts = Part.objects.filter(id__in=parts_ids, quantity__gt=0)
-        
-    #     total_cost = parts.aggregate(total_price=Sum('price'))['total_price'] or 0
-
-    #     with transaction.atomic():
-    #         # Get the current parts associated with the maintenance record
-    #         current_parts = maintenance.parts_used.all()
-
-    #         # Increase the quantity for parts that are removed
-    #         removed_parts = current_parts.exclude(id__in=parts_ids)
-    #         for part in removed_parts:
-    #             part.quantity += 1
-    #             part.save()
-
-    #         # Identify newly added parts
-    #         current_parts_ids = current_parts.values_list('id', flat=True)
-    #         newly_added_parts = parts.exclude(id__in=current_parts_ids)
-
-    #         # Decrease the quantity for newly added parts
-    #         for part in newly_added_parts:
-    #             part.quantity -= 1
-    #             part.save()
-
-    #     maintenance.machine = machine
-    #     maintenance.description = description
-    #     maintenance.date = date
-    #     maintenance.maintenance_cost = total_cost
-    #     maintenance.parts_used.set(parts)
-    #     maintenance.save()
-
-    #     return redirect('maintenance_list')
-
-    # else:
-    #     machines = Machine.objects.all()
-    #     parts = Part.objects.filter(quantity__gt=0)
-    context = {}
-    return render(request, '(core)/maintenance/edit_maintenance.html', context)
+def resolve_ticket(request, id):
+    ticket = get_object_or_404(Ticket, id=id)
     
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        if status:
+            ticket.status = status
+            if status == Ticket.COMPLETED:
+                ticket.uptime = timezone.now()
+        
+        # Validate and update parts
+        parts_valid = True
+        for part in ticket.parts.all():
+            part_no = part.part_no
+            amount_used = request.POST.get(f'part_{part_no}_used')
+            if amount_used:
+                try:
+                    amount_used = int(amount_used)
+                    if amount_used < 0 or amount_used > part.quantity:
+                        messages.error(request, f"Invalid amount used for part {part.part_no}. It should be between 0 and {part.quantity}.")
+                        parts_valid = False
+                    else:
+                        part.quantity -= amount_used
+                        part.save()
+                except ValueError:
+                    messages.error(request, f"Invalid input for part {part.part_no}. Please enter a valid number.")
+                    parts_valid = False
+        
+        if parts_valid:
+            ticket.save()
+            # Create a new TicketResolution entry
+            TicketResolution.objects.create(
+                ticket=ticket,
+                resolved_by=request.user,
+                resolution_status=status,
+                remarks=request.POST.get('remarks', '')
+            )
+            messages.success(request, "Ticket resolved successfully.")
+            return redirect('tickets_list')  # Replace 'tickets_list' with the name of the view to redirect to after successful resolution
+    
+    context = {
+        'ticket': ticket,
+    }
+    return render(request, '(core)/tickets/resolve_ticket.html', context)
