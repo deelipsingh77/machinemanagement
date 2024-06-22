@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse
-from core.models import MachinePart, Ticket, Machine, Part, Issue, Department
+from core.models import Location, Ticket, Machine, Part, Issue
 
 # Create your views here.
 def homepage(request):
@@ -10,7 +10,7 @@ def homepage(request):
 def ticket(request):
     machines = Machine.objects.all()
     issues = Issue.objects.all()
-    departments = Department.objects.all()
+    departments = Location.objects.all()
     
     if request.method == 'POST':
         ticket_no = request.POST['ticket_no']
@@ -22,10 +22,12 @@ def ticket(request):
         remarks = request.POST.get('remarks', '')
         department_id = request.POST['department']
 
+        print(part_ids)
+
         try:
             machine = get_object_or_404(Machine, id=machine_id)
             issue = get_object_or_404(Issue, id=issue_id)
-            department = get_object_or_404(Department, id=department_id)
+            department = get_object_or_404(Location, id=department_id)
             
             ticket = Ticket.objects.create(
                 ticket_no=ticket_no,
@@ -36,7 +38,8 @@ def ticket(request):
                 remarks=remarks,
                 department=department
             )
-            ticket.parts.set(Part.objects.filter(id__in=part_ids))
+            parts = Part.objects.filter(id__in=part_ids)
+            ticket.parts.set(parts)
             ticket.save()
 
             return redirect('/')

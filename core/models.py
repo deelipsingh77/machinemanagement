@@ -40,11 +40,11 @@ class MachinePart(models.Model):
     def __str__(self):
         return f"{self.machine} - {self.part} at {self.location}"
 
-class Department(models.Model):
-    department = models.CharField(max_length=100)
+# class Department(models.Model):
+#     department = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.department
+#     def __str__(self):
+#         return self.department
     
 class Issue(models.Model):
     issue = models.CharField(max_length=100)
@@ -69,7 +69,8 @@ class Ticket(models.Model):
     up_time = models.CharField(max_length=100)
     issue_list = models.ForeignKey(Issue, on_delete=models.CASCADE)
     remarks = models.TextField(blank=True, null=True)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    department = models.ForeignKey(Location, on_delete=models.CASCADE)
+    status = models.CharField(max_length=100, choices=TICKET_STATUS_CHOICES, default=PENDING)
 
     def __str__(self):
         return f"Ticket {self.ticket_no} for {self.machine}"

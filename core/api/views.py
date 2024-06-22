@@ -3,6 +3,16 @@ from django.shortcuts import get_object_or_404
 
 from core.models import Location, Machine, MachinePart, Part
 
+def get_machines_by_location(_, location_id):
+    # Ensure the location exists
+    location = get_object_or_404(Location, id=location_id)
+    
+    # Filter machines by the given location
+    machines = Machine.objects.filter(location=location).values('id', 'machine_name')
+    
+    # Return the machines as a JSON response
+    return JsonResponse(list(machines), safe=False)
+
 def get_parts_by_location(_, location_id):
     # Ensure the location exists
     location = get_object_or_404(Location, id=location_id)

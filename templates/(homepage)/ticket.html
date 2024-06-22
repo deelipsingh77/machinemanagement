@@ -3,109 +3,133 @@
 {% block title %}Issue Ticket{% endblock title %}
 
 {% block content %}
-    <div class="max-w-lg mx-auto mt-8">
-        <h2 class="text-xl font-bold mb-4">Issue Ticket</h2>
-        <form id="issue-ticket-form" method="post" class="space-y-4">
-            {% csrf_token %}
+<div class="max-w-lg mx-auto mt-8 bg-slate-200 p-8 rounded shadow-xl dark:bg-gray-800">
+    <h2 class="text-2xl font-bold mb-6 dark:text-white">Issue Ticket</h2>
+    <form id="issue-ticket-form" method="post" class="space-y-6">
+        {% csrf_token %}
 
-            <div>
-                <label for="ticket_no" class="block text-sm font-medium text-gray-700">Ticket Number:</label>
-                <input type="text" id="ticket_no" name="ticket_no" required
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
+        <div>
+            <label for="ticket_no" class="block text-sm font-medium text-gray-700 dark:text-white">Ticket Number:</label>
+            <input type="text" id="ticket_no" name="ticket_no" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+        </div>
 
-            <div>
-                <label for="machine" class="block text-sm font-medium text-gray-700">Machine:</label>
-                <select id="machine" name="machine" required
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option value="">Select Machine</option>
-                    {% for machine in machines %}
-                        <option value="{{ machine.id }}">{{ machine.machine_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div>
+            <label for="department" class="block text-sm font-medium text-gray-700 dark:text-white">Department:</label>
+            <select id="department" name="department" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                <option value="">Select Department</option>
+                {% for department in departments %}
+                    <option value="{{ department.id }}">{{ department.location }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-            <div>
-                <label for="parts" class="block text-sm font-medium text-gray-700">Parts:</label>
-                <select id="parts" name="parts[]" multiple required
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <!-- Options will be populated via AJAX -->
-                </select>
-            </div>
+        <div>
+            <label for="machine" class="block text-sm font-medium text-gray-700 dark:text-white">Machine:</label>
+            <select id="machine" name="machine" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                <option value="">Select Machine</option>
+                <!-- Options will be populated via AJAX -->
+            </select>
+        </div>
 
-            <div>
-                <label for="down_time" class="block text-sm font-medium text-gray-700">Down Time:</label>
-                <input type="text" id="down_time" name="down_time" required
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
+        <div>
+            <label for="parts" class="block text-sm font-medium text-gray-700 dark:text-white">Parts:</label>
+            <select id="parts" name="parts" multiple required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                <!-- Options will be populated via AJAX -->
+            </select>
+        </div>
 
-            <div>
-                <label for="up_time" class="block text-sm font-medium text-gray-700">Up Time:</label>
-                <input type="text" id="up_time" name="up_time" required
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
+        <div>
+            <label for="down_time" class="block text-sm font-medium text-gray-700 dark:text-white">Down Time:</label>
+            <input type="text" id="down_time" name="down_time" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+        </div>
 
-            <div>
-                <label for="issue_list" class="block text-sm font-medium text-gray-700">Issue:</label>
-                <select id="issue_list" name="issue_list" required
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    {% for issue in issues %}
-                        <option value="{{ issue.id }}">{{ issue.issue }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div>
+            <label for="up_time" class="block text-sm font-medium text-gray-700 dark:text-white">Up Time:</label>
+            <input type="text" id="up_time" name="up_time" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+        </div>
 
-            <div>
-                <label for="department" class="block text-sm font-medium text-gray-700">Department:</label>
-                <select id="department" name="department" required
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    {% for department in departments %}
-                        <option value="{{ department.id }}">{{ department.department }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div>
+            <label for="issue_list" class="block text-sm font-medium text-gray-700 dark:text-white">Issue:</label>
+            <select id="issue_list" name="issue_list" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                {% for issue in issues %}
+                    <option value="{{ issue.id }}">{{ issue.issue }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-            <div>
-                <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks:</label>
-                <textarea id="remarks" name="remarks"
-                          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
-            </div>
+        <div>
+            <label for="remarks" class="block text-sm font-medium text-gray-700 dark:text-white">Remarks:</label>
+            <textarea id="remarks" name="remarks"
+                      class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+        </div>
 
-            <button type="submit"
-                    class="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Issue Ticket
-            </button>
-        </form>
-    </div>
+        <button type="submit"
+                class="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Issue Ticket
+        </button>
+    </form>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const machineSelect = document.getElementById('machine');
-            const partsSelect = document.getElementById('parts');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const departmentSelect = document.getElementById('department');
+        const machineSelect = document.getElementById('machine');
+        const partsSelect = document.getElementById('parts');
 
-            machineSelect.addEventListener('change', function () {
-                const machineId = this.value;
-                if (machineId) {
-                    fetch(`/get_parts_for_machine/${machineId}/`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            partsSelect.innerHTML = '<option value="">Select Parts</option>';
-                            data.forEach(part => {
-                                partsSelect.innerHTML += `<option value="${part.id}">${part.part_name}</option>`;
-                            });
-                        })
-                        .catch(error => {
-                            console.error('Error fetching parts:', error);
+        departmentSelect.addEventListener('change', function () {
+            const departmentId = this.value;
+            if (departmentId) {
+                fetch(`/get_machines_by_location/${departmentId}/`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        machineSelect.innerHTML = '<option value="">Select Machine</option>';
+                        data.forEach(machine => {
+                            machineSelect.innerHTML += `<option value="${machine.id}">${machine.machine_name}</option>`;
                         });
-                } else {
-                    partsSelect.innerHTML = '<option value="">Select Parts</option>';
-                }
-            });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching machines:', error);
+                    });
+            } else {
+                machineSelect.innerHTML = '<option value="">Select Machine</option>';
+            }
         });
-    </script>
+
+        machineSelect.addEventListener('change', function () {
+            const machineId = this.value;
+            if (machineId) {
+                fetch(`/get_parts_for_machine/${machineId}/`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        partsSelect.innerHTML = '';
+                        data.forEach(part => {
+                            partsSelect.innerHTML += `<option value="${part.id}">${part.part_name}</option>`;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching parts:', error);
+                    });
+            } else {
+                partsSelect.innerHTML = '';
+            }
+        });
+    });
+</script>
 {% endblock %}
