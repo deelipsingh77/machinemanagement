@@ -65,13 +65,14 @@ class Ticket(models.Model):
     ticket_no = models.CharField(max_length=100, unique=True)
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
     parts = models.ManyToManyField(Part)
-    down_time = models.CharField(max_length=100)
-    up_time = models.CharField(max_length=100)
+    down_time = models.TimeField()
+    up_time = models.TimeField(null=True, blank=True)
     issue_list = models.ForeignKey(Issue, on_delete=models.CASCADE)
     remarks = models.TextField(blank=True, null=True)
     department = models.ForeignKey(Location, on_delete=models.CASCADE)
     status = models.CharField(max_length=100, choices=TICKET_STATUS_CHOICES, default=PENDING)
-
+    date_created = models.DateTimeField(auto_now_add=True)
+    
     def __str__(self):
         return f"Ticket {self.ticket_no} for {self.machine}"
     

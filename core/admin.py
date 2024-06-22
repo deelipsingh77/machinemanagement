@@ -36,7 +36,7 @@ class IssueAdmin(admin.ModelAdmin):
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ('ticket_no', 'machine' ,'down_time', 'up_time', 'issue_list', 'department')
+    list_display = ('ticket_no', 'machine' ,'down_time', 'up_time', 'issue_list', 'department', 'status', 'date_created')
     search_fields = ('ticket_no', 'machine__machine_name')
 
 @admin.register(TicketResolution)
