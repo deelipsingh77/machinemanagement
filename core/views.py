@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from dateutil.relativedelta import relativedelta
 
-from core.models import Location, Machine, MachinePart, Part
+from core.models import Location, Machine, MachinePart, Part, Ticket
 from django.db import models, transaction
 from django.db.models import Q, Sum, F
 
@@ -15,29 +15,28 @@ def dashboard(request):
     # total_machines = Machine.objects.count()
     
     # Count the total number of parts
-    # total_parts = Part.objects.aggregate(total_quantity=Sum('quantity'))['total_quantity']
-    # total_parts = total_parts if total_parts is not None else 0
+    total_parts = Part.objects.aggregate(total_quantity=Sum('quantity'))['total_quantity']
+    total_parts = total_parts if total_parts is not None else 0
     
     # Calculate the total value of all machines
-    # machines_value = Machine.objects.aggregate(total_value=models.Sum('price'))['total_value']
-    # machines_value = machines_value if machines_value is not None else 0
+    machines_value = Machine.objects.aggregate(total_value=models.Sum('price'))['total_value']
+    machines_value = machines_value if machines_value is not None else 0
     
     # Calculate the total value of all parts
-    # parts_value = Part.objects.annotate(
-    #     total_price_per_part=F('price') * F('quantity')
-    # ).aggregate(
-    #     total_value=Sum('total_price_per_part')
-    # )['total_value']
-    # parts_value = parts_value if parts_value is not None else 0
+    parts_value = Part.objects.annotate(
+        total_price_per_part=F('price') * F('quantity')
+    ).aggregate(
+        total_value=Sum('total_price_per_part')
+    )['total_value']
+    parts_value = parts_value if parts_value is not None else 0
     
-    # context = {
-    #     'total_machines': total_machines,
-    #     'total_parts': total_parts,
-    #     'machines_value': machines_value,
-    #     'parts_value': parts_value,
-    # }
-
-    context = {}
+    total_machines = Machine.objects.count()
+    context = {
+        "total_machines": total_machines,
+        "total_parts": total_parts,
+        'machines_value': machines_value,
+        'parts_value': parts_value,
+    }
     
     return render(request, '(core)/dashboard.html', context)
 
@@ -254,11 +253,44 @@ def machine_mapping_list(request):
 
     # return render(request, '(core)/machines/mapping_list.html', {'machine_data': machine_data.values()})
 
-    
     machines = Machine.objects.all()
     return render(request, '(core)/machines/mapping_list.html', {
         'machines': machines,
     })
+
+@login_required(login_url='login')
+def tickets_page(request):
+    return render(request, '(core)/tickets/tickets.html')
+
+@login_required(login_url='login')
+def tickets_list(request):
+    search_query = request.GET.get('search', '')
+    if search_query:
+        tickets = Ticket.objects.filter(
+            Q(department__location__icontains=search_query) | 
+            Q(ticket_no__icontains=search_query) | 
+            Q(status__icontains=search_query) |
+            Q(machine__machine_name__icontains=search_query) |
+            Q(parts__part_name__icontains=search_query) |
+            Q(down_time__icontains=search_query) |
+            Q(up_time__icontains=search_query) |
+            Q(issue_list__issue__icontains=search_query) |
+            Q(remarks__icontains=search_query)
+        ).distinct()
+    else:
+        tickets = Ticket.objects.all()
+    context = {
+        "tickets": tickets
+    }
+    return render(request, '(core)/tickets/tickets_list.html', context)
+
+
+
+
+
+
+
+
 
 @login_required(login_url='login')
 def maintenance_page(request):

@@ -1,7 +1,15 @@
 {
   "scripts": {
     "build": "npx tailwindcss -i ./css/styles.css -o ./static/css/styles.css --watch",
-    "dev": "py manage.py runserver"
+    "start": "py manage.py runserver",
+    "prestart": "npm run migrate",
+    "migrate": "py manage.py migrate",
+    "premigrate": "py manage.py makemigrations",
+    "app": "py manage.py startapp",
+    "test": "py manage.py test",
+    "shell": "py manage.py shell",
+    "su": "py manage.py createsuperuser",
+    "collectstatic": "py manage.py collectstatic"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.4"
