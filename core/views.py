@@ -6,7 +6,7 @@ from django.contrib import messages
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from core.models import Location, Machine, MachinePart, Part, Ticket, TicketResolution
+from core.models import Issue, Location, Machine, MachinePart, Part, Ticket, TicketResolution
 from django.db import models, transaction
 from django.db.models import Q, Sum, F
 
@@ -354,3 +354,29 @@ def resolve_ticket(request, id):
         'ticket': ticket,
     }
     return render(request, '(core)/tickets/resolve_ticket.html', context)
+
+@login_required(login_url='login')
+def add_location(request):
+    if request.method == 'POST':
+        location_name = request.POST.get('location')
+        if location_name:
+            Location.objects.create(location=location_name)
+            messages.success(request, 'Location added successfully.')
+            return redirect('add_location')  # Redirect to the same page or another as needed
+        else:
+            messages.error(request, 'Location name cannot be empty.')
+
+    return render(request, '(core)/add_location.html')
+
+@login_required(login_url='login')
+def add_issue(request):
+    if request.method == 'POST':
+        issue_name = request.POST.get('issue')
+        if issue_name:
+            Issue.objects.create(issue=issue_name)
+            messages.success(request, 'Issue added successfully.')
+            return redirect('add_issue')  # Redirect to the same page or another as needed
+        else:
+            messages.error(request, 'Issue name cannot be empty.')
+
+    return render(request, '(core)/add_issue.html')
