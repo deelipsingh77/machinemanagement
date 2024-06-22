@@ -278,12 +278,38 @@ def tickets_list(request):
             Q(remarks__icontains=search_query)
         ).distinct()
     else:
-        tickets = Ticket.objects.all()
+        tickets = Ticket.objects.all().order_by('-date_created')
     context = {
         "tickets": tickets
     }
     return render(request, '(core)/tickets/tickets_list.html', context)
 
+@login_required(login_url='login')
+def resolve_ticket(request):
+    if request.method == 'POST':
+        ticket_id = request.POST.get('ticket_id')
+        status = request.POST.get('status')
+
+        ticket = get_object_or_404(Ticket, id=ticket_id)
+        ticket.status = status
+        ticket.save()
+
+        parts_used = {key: value for key, value in request.POST.items() if key.startswith('part_') and key.endswith('_used')}
+        for part_key, amount_used in parts_used.items():
+            part_no = part_key.split('_')[1]
+            if amount_used:  # Check if amount_used is not empty
+                try:
+                    part = ticket.parts.get(part_no=part_no)
+                    part.quantity -= int(amount_used)
+                    part.save()
+                except Part.DoesNotExist:
+                    continue
+
+        # Optionally, add a success message or redirect to another page
+        return redirect('resolve_ticket')  # Redirect to the same page or another as needed
+
+    tickets = Ticket.objects.all()
+    return render(request, '(core)/tickets/resolve_ticket.html', {'tickets': tickets})
 
 
 

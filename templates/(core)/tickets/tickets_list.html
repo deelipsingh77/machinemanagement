@@ -54,7 +54,7 @@
                         <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
                             {{ ticket.machine }}
                         </td>
-                        <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                        <td class="px-5 py-3 max-w-24 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
                             {% for part in ticket.parts.all %}
                                 {{ part.part_name }}
                                 {% if not forloop.last %}, {% endif %}
@@ -74,7 +74,7 @@
                         <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
                             {{ ticket.department }}
                         </td>
-                        <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                        <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 {% if ticket.status == 'Pending' %}text-red-500{% elif ticket.status == 'Completed' %}text-green-500{% elif ticket.status == 'In Progress' %}text-blue-500{% endif %}">
                             {{ ticket.get_status_display }}
                         </td>
                         <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">

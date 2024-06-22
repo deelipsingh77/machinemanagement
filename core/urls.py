@@ -20,7 +20,7 @@ urlpatterns = [
 
     path('tickets/', views.tickets_page, name="tickets_page"),
     path('tickets/tickets_list/', views.tickets_list, name='tickets_list'),
-    # path('tickets/resolve_ticket/', views.resolve_ticket, name='resolve_ticket'),
+    path('tickets/resolve_ticket/', views.resolve_ticket, name='resolve_ticket'),
     
     path('maintenance/', views.maintenance_page, name='maintenance'),
     path('maintenance/add_maintenance/', views.add_maintenance, name='add_maintenance'),
