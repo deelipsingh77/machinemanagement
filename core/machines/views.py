@@ -51,7 +51,8 @@ def machines_list(request):
         machines = Machine.objects.filter(
             Q(machine_name__icontains=search_query) | 
             Q(id__icontains=search_query) | 
-            Q(price__icontains=search_query)
+            Q(price__icontains=search_query) |
+            Q(location__location__icontains=search_query)
         )
     else:
         machines = Machine.objects.all()
