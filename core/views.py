@@ -360,8 +360,29 @@ def tickets_list(request):
         ).distinct()
     else:
         tickets = Ticket.objects.all().order_by('-date_created')
+
+    # Filter tickets based on status
+    filter_status = request.GET.get('status', None)
+    if filter_status in ['Pending', 'In Progress', 'Completed']:
+        tickets = tickets.filter(status=filter_status)
+
+    # Filter tickets based on department
+    filter_department = request.GET.get('department', None)
+    if filter_department:
+        tickets = tickets.filter(department__location=filter_department)
+    
+    # Filter tickets based on issue
+    filter_issue = request.GET.get('issue', None)
+    if filter_issue:
+        tickets = tickets.filter(issue_list__issue=filter_issue)
+
+    locations = Location.objects.all()
+    issues = Issue.objects.all()
+
     context = {
-        "tickets": tickets
+        "tickets": tickets,
+        "locations": locations,
+        "issues": issues,
     }
     return render(request, '(core)/tickets/tickets_list.html', context)
 
