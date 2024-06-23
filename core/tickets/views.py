@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from core.models import Location, Ticket, Issue, Part, TicketResolution
+from core.models import Location, Ticket, Part, TicketResolution
 from django.utils import timezone
 
 @login_required(login_url='login')
@@ -21,7 +21,7 @@ def tickets_list(request):
             Q(parts__part_name__icontains=search_query) |
             Q(down_time__icontains=search_query) |
             Q(up_time__icontains=search_query) |
-            Q(issue_list__issue__icontains=search_query) |
+            Q(issue_list__icontains=search_query) |
             Q(remarks__icontains=search_query)
         ).distinct()
     else:
@@ -37,18 +37,11 @@ def tickets_list(request):
     if filter_department:
         tickets = tickets.filter(department__location=filter_department)
     
-    # Filter tickets based on issue
-    filter_issue = request.GET.get('issue', None)
-    if filter_issue:
-        tickets = tickets.filter(issue_list__issue=filter_issue)
-
     locations = Location.objects.all()
-    issues = Issue.objects.all()
 
     context = {
         "tickets": tickets,
         "locations": locations,
-        "issues": issues,
     }
     return render(request, '(core)/tickets/tickets_list.html', context)
 
@@ -136,22 +129,3 @@ def resolve_ticket(request, id):
         'ticket': ticket,
     }
     return render(request, '(core)/tickets/resolve_ticket.html', context)
-
-@login_required(login_url="login")
-def add_issue(request):
-    if request.method == "POST":
-        issue_name = request.POST.get("issue")
-        if issue_name:
-            Issue.objects.create(issue=issue_name)
-            messages.success(request, "Issue added successfully.")
-            return redirect(
-                "add_issue"
-            )  # Redirect to the same page or another as needed
-        else:
-            messages.error(request, "Issue name cannot be empty.")
-
-    issues = Issue.objects.all()  # Fetch all issues for displaying in the table
-
-    context = {"issues": issues}
-    return render(request, "(core)/tickets/add_issue.html", context)
-    

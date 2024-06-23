@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, F, Q
 from django.core.paginator import Paginator
-from core.models import Machine, Part, Ticket, Location, Issue
+from core.models import Machine, Part, Ticket, Location
 
 @login_required(login_url='login')
 def dashboard(request):
@@ -41,7 +41,7 @@ def dashboard(request):
             Q(parts__part_name__icontains=search_query) |
             Q(down_time__icontains=search_query) |
             Q(up_time__icontains=search_query) |
-            Q(issue_list__issue__icontains=search_query) |
+            Q(issue_list__icontains=search_query) |
             Q(remarks__icontains=search_query)
         ).distinct()
     
@@ -55,11 +55,6 @@ def dashboard(request):
     if filter_department:
         tickets = tickets.filter(department__location=filter_department)
     
-    # Filter tickets based on issue
-    filter_issue = request.GET.get('issue', None)
-    if filter_issue:
-        tickets = tickets.filter(issue_list__issue=filter_issue)
-    
     # Pagination setup for tickets
     paginator = Paginator(tickets, 10)  # Show 10 tickets per page
     page_number = request.GET.get('page')
@@ -67,7 +62,6 @@ def dashboard(request):
     
     total_machines = Machine.objects.count()
     locations = Location.objects.all()
-    issues = Issue.objects.all()
     
     context = {
         "total_machines": total_machines,
@@ -79,7 +73,6 @@ def dashboard(request):
         'completed_tickets_count': completed_tickets_count,
         'tickets': page_obj,
         'locations': locations,
-        'issues': issues,
     }
     
     return render(request, '(core)/dashboard.html', context)

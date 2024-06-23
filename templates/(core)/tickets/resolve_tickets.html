@@ -59,6 +59,12 @@ function fetchTicketDetails() {
             machineInfo.classList.add('dark:text-white');
             detailsDiv.appendChild(machineInfo);
 
+            //Add Issue Details
+            const issueInfo = document.createElement('p');
+            issueInfo.textContent = `Issue: ${data.issue}`;
+            issueInfo.classList.add('dark:text-white');
+            detailsDiv.appendChild(issueInfo);
+
             // Create table for parts
             const table = document.createElement('table');
             table.classList.add('min-w-full', 'bg-white', 'dark:bg-gray-800', 'dark:text-white', 'border', 'dark:border-gray-600');

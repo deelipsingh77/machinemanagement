@@ -26,6 +26,12 @@
                 <label class="text-sm font-medium dark:text-white">Machine</label>
                 <input type="text" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none" value="{{ ticket.machine.machine_name }}" readonly>
             </div>
+            
+            <!-- Issue Details (Read-only) -->
+            <div class="flex flex-col mt-4">
+                <label class="text-sm font-medium dark:text-white">Issue</label>
+                <input type="text" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none" value="{{ ticket.issue_list }}" readonly>
+            </div>
 
             <!-- Parts Details -->
             <div class="mt-4">

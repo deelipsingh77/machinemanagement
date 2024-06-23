@@ -42,11 +42,11 @@ class MachinePart(models.Model):
     def __str__(self):
         return f"{self.machine} - {self.part} at {self.location}"
 
-class Issue(models.Model):
-    issue = models.CharField(max_length=100)
+# class Issue(models.Model):
+#     issue = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.issue
+#     def __str__(self):
+#         return self.issue
 
 class Ticket(models.Model):
     PENDING = 'Pending'
@@ -63,8 +63,7 @@ class Ticket(models.Model):
     parts = models.ManyToManyField(Part)
     down_time = models.TimeField()
     up_time = models.TimeField(null=True, blank=True)
-    issue_list = models.ForeignKey(Issue, on_delete=models.CASCADE)
-    remarks = models.TextField(blank=True, null=True)
+    issue_list = models.CharField(max_length=100, null=True, blank=True)
     department = models.ForeignKey(Location, on_delete=models.CASCADE)
     status = models.CharField(max_length=100, choices=TICKET_STATUS_CHOICES, default=PENDING)
     date_created = models.DateTimeField(auto_now_add=True)

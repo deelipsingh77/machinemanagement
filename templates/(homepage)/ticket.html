@@ -8,12 +8,6 @@
     <form id="issue-ticket-form" method="post" class="space-y-6">
         {% csrf_token %}
 
-        {% comment %} <div>
-            <label for="ticket_no" class="block text-sm font-medium text-gray-700 dark:text-white">Ticket Number:</label>
-            <input type="text" id="ticket_no" name="ticket_no" required
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-        </div> {% endcomment %}
-
         <div>
             <label for="department" class="block text-sm font-medium text-gray-700 dark:text-white">Department:</label>
             <select id="department" name="department" required
@@ -48,26 +42,10 @@
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
         </div>
 
-        {% comment %} <div>
-            <label for="up_time" class="block text-sm font-medium text-gray-700 dark:text-white">Up Time:</label>
-            <input type="time" id="up_time" name="up_time"
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-        </div> {% endcomment %}
-
         <div>
-            <label for="issue_list" class="block text-sm font-medium text-gray-700 dark:text-white">Issue:</label>
-            <select id="issue_list" name="issue_list" required
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-                {% for issue in issues %}
-                    <option value="{{ issue.id }}">{{ issue.issue }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div>
-            <label for="remarks" class="block text-sm font-medium text-gray-700 dark:text-white">Remarks:</label>
-            <textarea id="remarks" name="remarks"
-                      class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+            <label for="issues" class="block text-sm font-medium text-gray-700 dark:text-white">Issues:</label>
+            <textarea id="issues" name="issues" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
         </div>
 
         <button type="submit"

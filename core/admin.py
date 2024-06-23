@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Issue, Location, Machine, Part, MachinePart, Ticket, TicketResolution
+from .models import Location, Machine, Part, MachinePart, Ticket, TicketResolution
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
@@ -29,10 +29,10 @@ class MachinePartAdmin(admin.ModelAdmin):
 #     list_display = ('department',)
 #     search_fields = ('department',)
 
-@admin.register(Issue)
-class IssueAdmin(admin.ModelAdmin):
-    list_display = ('issue',)
-    search_fields = ('issue',)
+# @admin.register(Issue)
+# class IssueAdmin(admin.ModelAdmin):
+#     list_display = ('issue',)
+#     search_fields = ('issue',)
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):

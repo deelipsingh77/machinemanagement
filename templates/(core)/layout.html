@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
     <script src="{% static "js/navbar.js" %}" defer></script>
     <script src="https://kit.fontawesome.com/0ccd97a603.js" crossorigin="anonymous"></script>
+    {% block styles %}{% endblock styles %}
 </head>
     <body class="dark:bg-gray-900">
         <header>
@@ -17,7 +18,7 @@
             {% comment %} <aside class="sm:col-span-4 md:col-span-3 lg:col-span-2 col-span-2 h-[calc(100vh-60px)] z-20"> {% endcomment %}
                 {% include "components/sidebar.html" %}
             {% comment %} </aside> {% endcomment %}
-            <div class="sm:ml-44 md:ml-48 lg:ml-64 ml-16 mt-24"> 
+            <div class="sm:ml-44 md:ml-48 lg:ml-64 ml-16 mt-20"> 
                 {% block content %}{% endblock content %}
             </div>
         </main>
