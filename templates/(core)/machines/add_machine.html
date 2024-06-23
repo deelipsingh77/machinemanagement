@@ -16,12 +16,6 @@
             <form method="post" class="space-y-4">
                 {% csrf_token %}
 
-                <!-- Machine Number -->
-                <div class="flex flex-col">
-                    <label for="machine_no" class="text-sm font-medium dark:text-white">Machine Number</label>
-                    <input type="text" id="machine_no" name="machine_no" placeholder="Enter machine number..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" required>
-                </div>
-
                 <!-- Machine Name -->
                 <div class="flex flex-col">
                     <label for="machine_name" class="text-sm font-medium dark:text-white">Machine Name</label>
@@ -34,7 +28,7 @@
                     <input type="date" id="purchase_date" name="purchase_date" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
                 </div>
 
-                <div class="flex w-full">
+                <div class="flex gap-4 w-full">
                     <!-- Warranty Years -->
                     <div class="flex flex-col w-full">
                         <label for="warranty_years" class="text-sm font-medium dark:text-white">Warranty Years</label>

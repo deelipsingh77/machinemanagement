@@ -1,96 +1,87 @@
-<div class="w-full h-full dark:bg-gray-800 bg-blue-400 z-0 dark-transition">
-  <div class="flex flex-col items-start justify-start h-full py-4">
-    <a
-      href="{% url "dashboard" %}"
-      class="flex justify-center sm:justify-normal items-center px-6 py-2 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="min-h-6 min-w-6 h-6 w-6 sm:mr-2"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+<div class="fixed top-0 left-0 h-full bg-blue-400 sm:w-44 md:w-48 lg:w-64 w-16 z-30 dark:bg-gray-800">
+  <div class="flex flex-col items-start justify-start h-full py-4 mt-16">
+      <a
+        href="{% url "dashboard" %}"
+        class="flex justify-center sm:justify-normal items-center px-6 py-2 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16m-7 6h7"
-        ></path>
-      </svg>
-      <span class="hidden sm:inline">
-        Dashboard
-      </span>
-    </a>
-    <a
-      href="{% url "machines" %}"
-      class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="min-h-6 min-w-6 h-6 w-6 sm:mr-2"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="min-h-6 min-w-6 h-6 w-6 sm:mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16m-7 6h7"
+          ></path>
+        </svg>
+        <span class="hidden sm:inline">
+          Dashboard
+        </span>
+      </a>
+      <a
+        href="{% url "machines" %}"
+        class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M13 10V3L4 14h7v7l9-11h-7z"
-        ></path>
-      </svg>
-      <span class="hidden sm:inline">
-        Machines
-      </span>
-    </a>
-    <a
-      href="{% url "parts" %}"
-      class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="min-h-6 min-w-6 h-6 w-6 sm:mr-2"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="min-h-6 min-w-6 h-6 w-6 sm:mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 10V3L4 14h7v7l9-11h-7z"
+          ></path>
+        </svg>
+        <span class="hidden sm:inline">
+          Machines
+        </span>
+      </a>
+      <a
+        href="{% url "parts" %}"
+        class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 4v16m8-8H4"
-        ></path>
-      </svg>
-      <span class="hidden sm:inline">
-        Parts
-      </span>
-    </a>
-    <a
-      href="{% url "add_location" %}"
-      class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
-    >
-      <i class="fa-solid fa-location-dot min-h-6 min-w-6 h-6 w-6 sm:mr-2"></i>
-      <span class="hidden sm:inline">
-        Add Location
-      </span>
-    </a>
-    <a
-      href="{% url "add_issue" %}"
-      class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
-    >
-      <i class="fa-solid fa-triangle-exclamation min-h-6 min-w-6 h-6 w-6 sm:mr-2"></i>
-      <span class="hidden sm:inline">
-        Add Issue
-      </span>
-    </a>
-    <a
-      href="{% url "tickets_page" %}"
-      class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
-    >
-      <i class="fa-solid fa-clipboard-list min-h-6 min-w-6 h-6 w-6 sm:mr-2"></i>
-      <span class="hidden sm:inline">Tickets</span>
-    </a>
-    <!-- Add more sidebar items as needed -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="min-h-6 min-w-6 h-6 w-6 sm:mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          ></path>
+        </svg>
+        <span class="hidden sm:inline">
+          Parts
+        </span>
+      </a>
+      <a
+        href="{% url "add_location" %}"
+        class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
+      >
+        <i class="fa-solid fa-location-dot min-h-6 min-w-6 h-6 w-6 sm:mr-2"></i>
+        <span class="hidden sm:inline">
+          Locations
+        </span>
+      </a>
+      <a
+        href="{% url "tickets_page" %}"
+        class="flex justify-center sm:justify-normal items-center px-6 py-2 mt-1 text-gray-200 hover:bg-gray-700 hover:text-white w-full"
+      >
+        <i class="fa-solid fa-clipboard-list min-h-6 min-w-6 h-6 w-6 sm:mr-2"></i>
+        <span class="hidden sm:inline">Tickets</span>
+      </a>
+      <!-- Add more sidebar items as needed -->
+    </div>
   </div>
-</div>

@@ -12,9 +12,8 @@ def ticket(request):
     machines = Machine.objects.all()
     issues = Issue.objects.all()
     departments = Location.objects.all()
-    
+
     if request.method == 'POST':
-        ticket_no = request.POST['ticket_no']
         machine_id = request.POST['machine']
         part_ids = request.POST.getlist('parts')
         down_time_str = request.POST['down_time']
@@ -30,9 +29,8 @@ def ticket(request):
 
             down_time = time.fromisoformat(down_time_str)
             up_time = time.fromisoformat(up_time_str) if up_time_str else None
-            
+
             ticket = Ticket.objects.create(
-                ticket_no=ticket_no,
                 machine=machine,
                 down_time=down_time,
                 up_time=up_time,
@@ -47,7 +45,7 @@ def ticket(request):
             return redirect('/')
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
-    
+
     return render(request, '(homepage)/ticket.html', {
         'machines': machines,
         'issues': issues,

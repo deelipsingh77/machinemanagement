@@ -1,4 +1,4 @@
-<nav class="bg-blue-500 dark:bg-slate-700 p-4 sticky w-full z-10 dark-transition">
+<nav class="bg-blue-500 dark:bg-slate-700 p-4 fixed w-screen top-0 z-50 dark-transition">
   <div class="container mx-auto flex justify-between items-center">
     <a href="#" class="text-white text-xl font-bold">Maintenance Management</a>
     <div class="hidden md:flex sm:items-center space-x-4">
@@ -37,7 +37,7 @@
 </nav>
 <div
   id="mobile-menu"
-  class="md:hidden fixed inset-x-0 top-14 bg-blue-500 dark:bg-slate-700 transform -translate-y-full transition-all duration-300 ease-in-out z-[5]">
+  class="md:hidden fixed inset-x-0 top-14 bg-blue-500 dark:bg-slate-700 transform -translate-y-full transition-all duration-300 ease-in-out z-40">
   <a href="{% url "home" %}" class="block text-white py-2 px-4 w-full hover:bg-gray-300 hover:text-gray-800">Home</a>
   <a href="#" class="block text-white py-2 px-4 w-full hover:bg-gray-300 hover:text-gray-800">About</a>
   <a href="{% url "ticket" %}" class="block text-white py-2 px-4 w-full hover:bg-gray-300 hover:text-gray-800">Raise a Ticket</a>

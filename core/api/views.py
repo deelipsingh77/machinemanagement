@@ -45,7 +45,7 @@ def get_ticket_details(_, ticket_id):
         ticket_data = {
             "ticket_no": ticket.ticket_no,
             "machine": ticket.machine.machine_name,
-            "parts": list(ticket.parts.values("part_no", "part_name", "quantity")),
+            "parts": list(ticket.parts.values("id", "part_name", "quantity")),
             "down_time": ticket.down_time,
             "up_time": ticket.up_time,
             "issue": ticket.issue_list.issue,

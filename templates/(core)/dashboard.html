@@ -3,26 +3,17 @@
 {% block title %}Dashboard{% endblock title %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Dashboard</h1>
+<h1 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 p-5 pt-0">Dashboard</h1>
+<div class="container flex flex-col gap-10 mx-auto px-4">
+
+    <!-- Dashboard Cards -->
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Machines Card -->
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
             <div class="flex items-center">
                 <div class="p-3 bg-blue-500 text-white rounded-full">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="min-h-6 min-w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                        ></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                     </svg>
                 </div>
                 <div class="ml-4">
@@ -35,19 +26,8 @@
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
             <div class="flex items-center">
                 <div class="p-3 bg-green-500 text-white rounded-full">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="min-h-6 min-w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 4v16m8-8H4"
-                        ></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
                 </div>
                 <div class="ml-4">
@@ -60,7 +40,9 @@
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
             <div class="flex items-center">
                 <div class="p-3 bg-yellow-500 text-white rounded-full">
-                    <!-- Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
                 </div>
                 <div class="ml-4">
                     <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ machines_value }}</h2>
@@ -72,13 +54,159 @@
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
             <div class="flex items-center">
                 <div class="p-3 bg-red-500 text-white rounded-full">
-                    <!-- Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
                 </div>
                 <div class="ml-4">
                     <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ parts_value }}</h2>
                     <div class="text-gray-500 dark:text-gray-400">Parts Value</div>
                 </div>
             </div>
+        </div>
+        <!-- Pending Tickets Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+            <div class="flex items-center">
+                <div class="p-3 bg-red-500 text-white rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ pending_tickets_count }}</h2>
+                    <div class="text-gray-500 dark:text-gray-400">Pending Tickets</div>
+                </div>
+            </div>
+        </div>
+        <!-- In Progress Tickets Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+            <div class="flex items-center">
+                <div class="p-3 bg-yellow-500 text-white rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ in_progress_tickets_count }}</h2>
+                    <div class="text-gray-500 dark:text-gray-400">In Progress Tickets</div>
+                </div>
+            </div>
+        </div>
+        <!-- Completed Tickets Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+            <div class="flex items-center">
+                <div class="p-3 bg-blue-500 text-white rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l6 6a2 2 0 0 0 3-3l-6-6a2 2 0 0 0-3 3z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ completed_tickets_count }}</h2>
+                    <div class="text-gray-500 dark:text-gray-400">Completed Tickets</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tickets List -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Tickets List</h2>
+        <div class="overflow-x-auto">
+            <div class="bg-white shadow-md rounded-lg overflow-hidden dark:bg-gray-700">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Ticket No
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Machine
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Parts
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Down Time
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Up Time
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Issue
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Department
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Status
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Date Created
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                                {{ ticket.ticket_no }}
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                                {{ ticket.machine }}
+                            </td>
+                            <td class="px-5 py-3 max-w-24 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                                {% for part in ticket.parts.all %}
+                                    {{ part.part_name }}
+                                    {% if not forloop.last %}, {% endif %}
+                                {% empty %}
+                                    No parts
+                                {% endfor %}
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                                {{ ticket.down_time }}
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                                {{ ticket.up_time|default:"N/A" }}
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                                {{ ticket.issue_list }}
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                                {{ ticket.department }}
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 {% if ticket.status == 'Pending' %}text-red-500{% elif ticket.status == 'Completed' %}text-green-500{% elif ticket.status == 'In Progress' %}text-blue-500{% endif %}">
+                                {{ ticket.get_status_display }}
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600 dark:text-white">
+                                {{ ticket.date_created|date:"Y-m-d H:i" }}
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-600">
+                                <a href="{% url 'resolve_ticket' ticket.id %}" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Resolve</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Pagination -->
+        <div class="mt-4">
+            {% if tickets.has_other_pages %}
+                <nav class="flex justify-between">
+                    {% if tickets.has_previous %}
+                        <a href="?page=1" class="px-3 py-1 bg-blue-500 text-white rounded">First</a>
+                        <a href="?page={{ tickets.previous_page_number }}" class="px-3 py-1 bg-blue-500 text-white rounded">Previous</a>
+                    {% endif %}
+                    <span class="text-gray-700 dark:text-gray-300">{{ tickets.number }} / {{ tickets.paginator.num_pages }}</span>
+                    {% if tickets.has_next %}
+                        <a href="?page={{ tickets.next_page_number }}" class="px-3 py-1 bg-blue-500 text-white rounded">Next</a>
+                        <a href="?page={{ tickets.paginator.num_pages }}" class="px-3 py-1 bg-blue-500 text-white rounded">Last</a>
+                    {% endif %}
+                </nav>
+            {% endif %}
         </div>
     </div>
 </div>

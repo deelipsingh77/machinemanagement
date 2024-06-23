@@ -13,11 +13,11 @@
         <header>
             {% include "components/navbar.html" %}
         </header>
-        <main class="container grid grid-cols-12">
-            <aside class="sm:col-span-4 md:col-span-3 lg:col-span-2 col-span-2 h-[calc(100vh-60px)]">
+        <main class="container">
+            {% comment %} <aside class="sm:col-span-4 md:col-span-3 lg:col-span-2 col-span-2 h-[calc(100vh-60px)] z-20"> {% endcomment %}
                 {% include "components/sidebar.html" %}
-            </aside>
-            <div class="sm:col-span-8 md:col-span-9 lg:col-span-10 col-span-10"> 
+            {% comment %} </aside> {% endcomment %}
+            <div class="sm:ml-44 md:ml-48 lg:ml-64 ml-16 mt-24"> 
                 {% block content %}{% endblock content %}
             </div>
         </main>

@@ -8,15 +8,15 @@ class LocationAdmin(admin.ModelAdmin):
     
 @admin.register(Machine)
 class MachineAdmin(admin.ModelAdmin):
-    list_display = ('machine_no', 'machine_name', 'purchase_date', 'machine_warranty', 'location', 'price')
+    list_display = ('id', 'machine_name', 'purchase_date', 'machine_warranty', 'location', 'price')
     list_filter = ('location', 'purchase_date')
-    search_fields = ('machine_no', 'machine_name')
+    search_fields = ('id', 'machine_name')
 
 @admin.register(Part)
 class PartAdmin(admin.ModelAdmin):
-    list_display = ('part_no', 'part_name', 'purchase_date', 'part_warranty' ,'quantity', 'location', 'price')
+    list_display = ('id', 'part_name', 'purchase_date', 'part_warranty' ,'quantity', 'location', 'price')
     list_filter = ('location', 'purchase_date')
-    search_fields = ('part_no', 'part_name')
+    search_fields = ('id', 'part_name')
 
 @admin.register(MachinePart)
 class MachinePartAdmin(admin.ModelAdmin):

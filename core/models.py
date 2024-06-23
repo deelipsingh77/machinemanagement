@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+import uuid
 
 class Machine(models.Model):
-    machine_no = models.CharField(max_length=100, unique=True)
+    # machine_no = models.CharField(max_length=100, unique=True)
     machine_name = models.CharField(max_length=200)
     purchase_date = models.DateField()
     machine_warranty = models.DateField()
@@ -14,7 +16,7 @@ class Machine(models.Model):
         return self.machine_name
 
 class Part(models.Model):
-    part_no = models.CharField(max_length=100, unique=True)
+    # part_no = models.CharField(max_length=100, unique=True)
     part_name = models.CharField(max_length=200)
     purchase_date = models.DateField()
     part_warranty = models.DateField()
@@ -40,12 +42,6 @@ class MachinePart(models.Model):
     def __str__(self):
         return f"{self.machine} - {self.part} at {self.location}"
 
-# class Department(models.Model):
-#     department = models.CharField(max_length=100)
-
-#     def __str__(self):
-#         return self.department
-    
 class Issue(models.Model):
     issue = models.CharField(max_length=100)
 
@@ -72,6 +68,14 @@ class Ticket(models.Model):
     department = models.ForeignKey(Location, on_delete=models.CASCADE)
     status = models.CharField(max_length=100, choices=TICKET_STATUS_CHOICES, default=PENDING)
     date_created = models.DateTimeField(auto_now_add=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.ticket_no:
+            self.ticket_no = self.generate_ticket_no()
+        super().save(*args, **kwargs)
+
+    def generate_ticket_no(self):
+        return f"T-{uuid.uuid4().hex[:8].upper()}-{timezone.now().strftime('%Y%m%d')}"
     
     def __str__(self):
         return f"Ticket {self.ticket_no} for {self.machine}"
