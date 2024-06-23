@@ -111,6 +111,45 @@
     <!-- Tickets List -->
     <div class="mb-8">
         <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Tickets List</h2>
+        <!-- Filter and Search Form -->
+        <form action="{% url 'dashboard' %}" method="GET" class="mb-4 w-full flex gap-4">
+            <div class="flex-1">
+                <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Search:</label>
+                <input type="text" name="search" id="search" placeholder="Search tickets..." class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div class="flex-1">
+                <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Filter by Status:</label>
+                <select name="status" id="status" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">All</option>
+                    <option value="Pending" {% if request.GET.status == "Pending" %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if request.GET.status == "In Progress" %}selected{% endif %}>In Progress</option>
+                    <option value="Completed" {% if request.GET.status == "Completed" %}selected{% endif %}>Completed</option>
+                </select>
+            </div>
+            <div class="flex-1">
+                <label for="department" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Filter by Department:</label>
+                <select name="department" id="department" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">All</option>
+                    {% for department in locations %}
+                        <option value="{{department.location}}" {% if request.GET.department == department.location %}selected{% endif %}>{{department.location}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex-1">
+                <label for="issue" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Filter by Issue:</label>
+                <select name="issue" id="issue" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">All</option>
+                    {% for issue in issues %}
+                        <option value="{{issue.issue}}">{{issue.issue}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Apply</button>
+                <a href="{% url 'dashboard' %}" class="ml-2 text-gray-500 dark:text-gray-300 hover:underline">Clear Filters</a>
+            </div>
+        </form>
+
         <div class="overflow-x-auto">
             <div class="bg-white shadow-md rounded-lg overflow-hidden dark:bg-gray-700">
                 <table class="min-w-full leading-normal">

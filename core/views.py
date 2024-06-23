@@ -18,7 +18,7 @@ def dashboard(request):
     total_parts = total_parts if total_parts is not None else 0
     
     # Calculate the total value of all machines
-    machines_value = Machine.objects.aggregate(total_value=models.Sum('price'))['total_value']
+    machines_value = Machine.objects.aggregate(total_value=Sum('price'))['total_value']
     machines_value = machines_value if machines_value is not None else 0
     
     # Calculate the total value of all parts
@@ -37,12 +37,44 @@ def dashboard(request):
     # Retrieve all tickets and order by date_created
     tickets = Ticket.objects.all().order_by('-date_created')
     
+    # Filter tickets based on search query
+    search_query = request.GET.get('search', None)
+    if search_query:
+        tickets = tickets.filter(
+            Q(department__location__icontains=search_query) | 
+            Q(ticket_no__icontains=search_query) | 
+            Q(status__icontains=search_query) |
+            Q(machine__machine_name__icontains=search_query) |
+            Q(parts__part_name__icontains=search_query) |
+            Q(down_time__icontains=search_query) |
+            Q(up_time__icontains=search_query) |
+            Q(issue_list__issue__icontains=search_query) |
+            Q(remarks__icontains=search_query)
+        ).distinct()
+    
+    # Filter tickets based on status
+    filter_status = request.GET.get('status', None)
+    if filter_status in ['Pending', 'In Progress', 'Completed']:
+        tickets = tickets.filter(status=filter_status)
+
+    # Filter tickets based on department
+    filter_department = request.GET.get('department', None)
+    if filter_department:
+        tickets = tickets.filter(department__location=filter_department)
+    
+    # Filter tickets based on issue
+    filter_issue = request.GET.get('issue', None)
+    if filter_issue:
+        tickets = tickets.filter(issue_list__issue=filter_issue)
+    
     # Pagination setup for tickets
     paginator = Paginator(tickets, 10)  # Show 10 tickets per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
     total_machines = Machine.objects.count()
+    locations = Location.objects.all()
+    issues = Issue.objects.all()
     
     context = {
         "total_machines": total_machines,
@@ -52,7 +84,9 @@ def dashboard(request):
         'pending_tickets_count': pending_tickets_count,
         'in_progress_tickets_count': in_progress_tickets_count,
         'completed_tickets_count': completed_tickets_count,
-        'tickets': page_obj,  # Use paginated tickets here
+        'tickets': page_obj,
+        'locations': locations,
+        'issues': issues,
     }
     
     return render(request, '(core)/dashboard.html', context)
@@ -390,7 +424,7 @@ def resolve_ticket(request, id):
                 try:
                     amount_used = int(amount_used)
                     if amount_used < 0 or amount_used > part.quantity:
-                        messages.error(request, f"Invalid amount used for part {part.id}. It should be between 0 and {part.quantity}.")
+                        messages.error(request, f"Invalid quantity used for part {part.id}. It should be between 0 and {part.quantity}.")
                         parts_valid = False
                     else:
                         part.quantity -= amount_used
