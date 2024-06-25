@@ -2,7 +2,7 @@ from calendar import c
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Location
+from .models import Department, Location
 
 @login_required(login_url="login")
 def add_location(request):
@@ -23,3 +23,23 @@ def add_location(request):
 
     context = {"locations": locations}
     return render(request, "(core)/add_location.html", context)
+
+@login_required(login_url="login")
+def add_department(request):
+    if request.method == "POST":
+        department_name = request.POST.get("department")
+        if department_name:
+            Department.objects.create(name=department_name)
+            messages.success(request, "Department added successfully.")
+            return redirect(
+                "add_department"
+            )  # Redirect to the same page or another as needed
+        else:
+            messages.error(request, "Department name cannot be empty.")
+            
+    departments = (
+        Department.objects.all()
+    )  # Fetch all departments for displaying in the table
+    
+    context = {"departments": departments}
+    return render(request, "(core)/add_department.html", context)

@@ -1,0 +1,59 @@
+{% extends "(core)/layout.html" %}
+
+{% block title %}Add Department{% endblock title %}
+
+{% block content %}
+<div class="w-full h-full flex justify-center items-center">
+    <div class="w-[70%] dark:bg-gray-800 bg-slate-200 p-8 rounded shadow-xl">
+        <h2 class="text-2xl font-semibold dark:text-white mb-6">Add Department</h2>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="text-red-600">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form method="POST" action="{% url 'add_department' %}" class="space-y-4">
+            {% csrf_token %}
+            <div class="flex flex-col">
+                <label for="department" class="text-sm font-medium dark:text-white">Department Name</label>
+                <input type="text" id="department" name="department" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none" required>
+            </div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">Add Department</button>
+        </form>
+
+        <!-- Table to display locations -->
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold dark:text-white mb-4">All Departments</h2>
+            <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="px-5 py-3 bg-gray-200 dark:bg-gray-700 text-xs font-medium text-gray-700 dark:text-white uppercase tracking-wider text-left">ID</th>
+                                <th scope="col" class="px-5 py-3 bg-gray-200 dark:bg-gray-700 text-xs font-medium text-gray-700 dark:text-white uppercase tracking-wider text-left">Department Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for department in departments %}
+                            <tr>
+                                <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-600 text-sm dark:text-white">
+                                    {{ department.id }}
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-600 text-sm dark:text-white">
+                                    {{ department.name }}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-600 text-sm text-center dark:text-white">No Departments found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

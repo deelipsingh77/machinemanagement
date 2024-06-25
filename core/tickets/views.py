@@ -41,7 +41,7 @@ def tickets_list(request):
     # Filter tickets based on location
     filter_location = request.GET.get('location', None)
     if filter_location:
-        tickets = tickets.filter(department__name=filter_location)
+        tickets = tickets.filter(location__location=filter_location)
 
     locations = Location.objects.all()
     departments = Department.objects.all()
