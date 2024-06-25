@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.db.models import Sum
 from django.utils.dateparse import parse_date
 from core.models import Machine, Location, Part, PartPurchase
+from django.db.models import Q
 
 @login_required(login_url='login')
 def reports(request):
@@ -68,6 +69,7 @@ def purchases_report(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
     location_id = request.GET.get('location_id')
+    search_query = request.GET.get('search', None)
 
     purchases = PartPurchase.objects.all()
 
@@ -77,6 +79,14 @@ def purchases_report(request):
         purchases = purchases.filter(purchase_date__lte=end_date)
     if location_id:
         purchases = purchases.filter(part__location_id=location_id)
+    
+    if search_query:
+        purchases = purchases.filter(
+            Q(part__part_name__icontains=search_query) | 
+            Q(vendor_name__icontains=search_query) |
+            Q(purchase_quantity__icontains=search_query) |
+            Q(total_amount__icontains=search_query)
+        )
 
     total_value = purchases.aggregate(total_value=Sum('total_amount'))['total_value'] or 0
     total_quantity = purchases.aggregate(total_quantity=Sum('purchase_quantity'))['total_quantity'] or 0

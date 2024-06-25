@@ -140,8 +140,30 @@ def purchase_part(request):
 
 @login_required(login_url='login')
 def purchase_history(request):
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    location_id = request.GET.get('location_id')
+    search_query = request.GET.get('search', None)
+
     purchases = PartPurchase.objects.all()
+
+    if start_date:
+        purchases = purchases.filter(purchase_date__gte=start_date)
+    if end_date:
+        purchases = purchases.filter(purchase_date__lte=end_date)
+    if location_id:
+        purchases = purchases.filter(part__location_id=location_id)
+
+    if search_query:
+        purchases = purchases.filter(
+            Q(part__part_name__icontains=search_query) | 
+            Q(vendor_name__icontains=search_query) |
+            Q(purchase_quantity__icontains=search_query) |
+            Q(total_amount__icontains=search_query)
+        )
+
     context = {
-        'purchases': purchases
+        'purchases': purchases,
+        'locations': Location.objects.all()
     }
     return render(request, '(core)/parts/purchase_history.html', context)

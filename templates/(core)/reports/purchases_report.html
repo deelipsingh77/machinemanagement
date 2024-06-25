@@ -8,6 +8,10 @@
 
     <form method="get" class="mb-6">
         <div class="flex space-x-4">
+            <div class="max-w-52 flex-1">
+                <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Search:</label>
+                <input type="text" name="search" id="search" placeholder="Search purchases..." class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
             <div>
                 <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Start Date:</label>
                 <input type="date" id="start_date" name="start_date" value="{{ start_date }}"
