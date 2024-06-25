@@ -15,15 +15,11 @@ def parts_page(request):
 def add_part(request):
     if request.method == 'POST':
         part_name = request.POST.get('part_name')
-        purchase_date_str = request.POST.get('purchase_date')
         warranty_years = int(request.POST.get('warranty_years', 0) or 0)
         warranty_months = int(request.POST.get('warranty_months', 0) or 0)
         shelf_life = request.POST.get('shelf_life')
         price = request.POST.get('price')
         quantity = int(request.POST.get('quantity', 1) or 1)
-
-        # Convert purchase_date from string to date object
-        purchase_date = datetime.strptime(purchase_date_str, '%Y-%m-%d').date()
 
         try:
             location_id = request.POST.get('location')
@@ -32,7 +28,6 @@ def add_part(request):
             # Create and save the new part with part_warranty
             Part.objects.create(
                 part_name=part_name,
-                purchase_date=purchase_date,
                 shelf_life=shelf_life,
                 location=location,
                 price=price,
@@ -106,12 +101,19 @@ def purchase_part(request):
         quantity = int(request.POST.get('quantity', 0))
         vendor_name = request.POST.get('vendor_name')
         gst = Decimal(request.POST.get('gst', '0.00'))
-        purchase_date = timezone.now()
+        purchase_date = request.POST.get('purchase_date')  # Get the purchase date from the form
         part = get_object_or_404(Part, id=part_id)
+        
+        # Convert purchase_date to a datetime object
+        if purchase_date:
+            purchase_date = timezone.datetime.strptime(purchase_date, '%Y-%m-%d').date()
+        else:
+            purchase_date = timezone.now().date()  # Default to current date if not provided
         
         # Calculate total amount using Decimal for precise arithmetic
         total_amount = part.price * (1 + gst / Decimal('100')) * quantity
         
+        # Update part quantity
         # part.quantity += quantity
         part.save()
         
@@ -121,11 +123,11 @@ def purchase_part(request):
             purchase_quantity=quantity,
             gst=gst,
             total_amount=total_amount,
-            purchase_date=purchase_date
+            purchase_date=purchase_date  # Use the purchase date from the form
         )
 
         messages.success(request, f"Part purchase recorded successfully: {part_purchase}")
-        return redirect('dashboard')  # Replace 'part_purchase' with your view name
+        return redirect('dashboard')  # Replace 'dashboard' with your view name
 
     locations = Location.objects.all()
     parts = Part.objects.all()

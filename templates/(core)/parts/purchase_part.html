@@ -12,7 +12,7 @@
             <label for="part_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Part:</label>
             <select id="part_id" name="part_id" class="mt-1 block w-full py-2 px-3 border text-gray-700 dark:text-gray-300 border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 {% for part in parts %}
-                    <option value="{{ part.id }}" data-price="{{ part.price }}">{{ part.part_name }}</option>
+                    <option value="{{ part.id }}" data-price="{{ part.price }}">{{ part.part_name }} - {{ part.location }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -35,6 +35,11 @@
         <div class="mb-4">
             <label for="total_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Amount:</label>
             <input type="text" id="total_amount" name="total_amount" readonly class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <div class="mb-4">
+            <label for="total_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Date:</label>
+            <input type="date" id="purchase_date" name="purchase_date" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
         </div>
 
         <div class="flex items-center justify-between">

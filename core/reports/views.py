@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db.models import Sum
 from django.utils.dateparse import parse_date
-from core.models import Machine, Location, Part
+from core.models import Machine, Location, Part, PartPurchase
 
 @login_required(login_url='login')
 def reports(request):
@@ -46,13 +46,6 @@ def parts_report(request):
 
     parts = Part.objects.all()
 
-    if start_date:
-        parts = parts.filter(purchase_date__gte=start_date)
-    if end_date:
-        parts = parts.filter(purchase_date__lte=end_date)
-    if location_id:
-        parts = parts.filter(location_id=location_id)
-
     total_value = parts.aggregate(total_value=Sum('price'))['total_value'] or 0
     total_quantity = parts.aggregate(total_quantity=Sum('quantity'))['total_quantity'] or 0
 
@@ -69,3 +62,35 @@ def parts_report(request):
     }
 
     return render(request, '(core)/reports/parts_report.html', context)
+
+@login_required(login_url='login')
+def purchases_report(request):
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    location_id = request.GET.get('location_id')
+
+    purchases = PartPurchase.objects.all()
+
+    if start_date:
+        purchases = purchases.filter(purchase_date__gte=start_date)
+    if end_date:
+        purchases = purchases.filter(purchase_date__lte=end_date)
+    if location_id:
+        purchases = purchases.filter(part__location_id=location_id)
+
+    total_value = purchases.aggregate(total_value=Sum('total_amount'))['total_value'] or 0
+    total_quantity = purchases.aggregate(total_quantity=Sum('purchase_quantity'))['total_quantity'] or 0
+
+    locations = Location.objects.all()
+
+    context = {
+        'purchases': purchases,
+        'total_value': total_value,
+        'total_quantity': total_quantity,
+        'locations': locations,
+        'start_date': start_date,
+        'end_date': end_date,
+        'location_id': location_id,
+    }
+
+    return render(request, '(core)/reports/purchases_report.html', context)

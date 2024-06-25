@@ -3,7 +3,7 @@
 {% block title %}Reports{% endblock title %}
 
 {% block content %}
-    <div class="w-full sm:w-fit flex justify-center items-center gap-8 mt-4 sm:ml-4">
+    <div class="w-full sm:w-fit flex justify-center items-center gap-8 mt-4 sm:ml-4 flex-wrap">
         <a href="{% url "machines_report" %}">
             <button
                 class="h-20 w-32 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
@@ -14,6 +14,12 @@
             <button
                 class="h-20 w-32 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
             >Parts</button>
+        </a>
+
+        <a href="{% url "purchases_report" %}">
+            <button
+                class="h-20 w-32 bg-green-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
+            >Purchases</button>
         </a>
     </div>
 {% endblock content %}

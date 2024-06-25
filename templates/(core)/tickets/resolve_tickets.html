@@ -101,19 +101,36 @@ function fetchTicketDetails() {
             // Add used parts details (if any)
             const usedPartsDiv = document.createElement('div');
             usedPartsDiv.classList.add('mt-4');
-            usedPartsDiv.innerHTML = `
+
+            let tableHTML = `
                 <label class="text-sm font-medium dark:text-white">Used Parts Details</label>
-                <ul class="list-disc list-inside">
-                    {% for ticket in tickets %}
-                        {% for resolution in ticket.ticketresolution_set.all %}
-                            {% for used_part in resolution.usedpart_set.all %}
-                                <li>{{ used_part.quantity_used }} of {{ used_part.part }}</li>
-                            {% endfor %}
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Quantity Used</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Part</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                {% for ticket in tickets %}
+                                    {% for resolution in ticket.ticketresolution_set.all %}
+                                        {% for used_part in resolution.usedpart_set.all %}
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-200">{{ used_part.quantity_used }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-200">{{ used_part.part }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             `;
+
+            usedPartsDiv.innerHTML = tableHTML;
             detailsDiv.appendChild(usedPartsDiv);
+
 
             // Update ticket status
             const statusContainer = document.getElementById('statusContainer');
