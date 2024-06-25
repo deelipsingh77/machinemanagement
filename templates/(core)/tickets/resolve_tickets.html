@@ -98,6 +98,23 @@ function fetchTicketDetails() {
                 tbody.appendChild(row);
             });
 
+            // Add used parts details (if any)
+            const usedPartsDiv = document.createElement('div');
+            usedPartsDiv.classList.add('mt-4');
+            usedPartsDiv.innerHTML = `
+                <label class="text-sm font-medium dark:text-white">Used Parts Details</label>
+                <ul class="list-disc list-inside">
+                    {% for ticket in tickets %}
+                        {% for resolution in ticket.ticketresolution_set.all %}
+                            {% for used_part in resolution.usedpart_set.all %}
+                                <li>{{ used_part.quantity_used }} of {{ used_part.part }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            `;
+            detailsDiv.appendChild(usedPartsDiv);
+
             // Update ticket status
             const statusContainer = document.getElementById('statusContainer');
             statusContainer.innerHTML = `

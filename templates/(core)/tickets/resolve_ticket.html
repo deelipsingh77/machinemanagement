@@ -1,6 +1,6 @@
 {% extends "(core)/layout.html" %}
 
-{% block title %}Resolve Ticket{% endblock title %}
+{% block title %}Resolve Ticket - {{ ticket.ticket_no }}{% endblock title %}
 
 {% block content %}
 <div class="w-full h-full flex justify-center items-center">
@@ -58,6 +58,18 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Used Parts Details -->
+            <div class="mt-4">
+                <label class="text-sm font-medium dark:text-white">Used Parts Details</label>
+                <ul class="list-disc list-inside">
+                    {% for resolution in ticket.ticketresolution_set.all %}
+                        {% for used_part in resolution.usedpart_set.all %}
+                            <li>{{ used_part.quantity_used }} of {{ used_part.part }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
             </div>
 
             <!-- Ticket Status -->

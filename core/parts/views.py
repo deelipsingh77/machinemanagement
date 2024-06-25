@@ -3,9 +3,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from core.models import Location, Part
-from django.utils.timezone import make_aware
 
 @login_required(login_url='login')
 def parts_page(request):
@@ -25,9 +23,6 @@ def add_part(request):
         # Convert purchase_date from string to date object
         purchase_date = datetime.strptime(purchase_date_str, '%Y-%m-%d').date()
 
-        # Calculate part_warranty by adding warranty_years and warranty_months to purchase_date
-        part_warranty = purchase_date + relativedelta(years=warranty_years, months=warranty_months)
-
         try:
             location_id = request.POST.get('location')
             location = get_object_or_404(Location, pk=location_id)
@@ -36,11 +31,12 @@ def add_part(request):
             Part.objects.create(
                 part_name=part_name,
                 purchase_date=purchase_date,
-                part_warranty=part_warranty,
                 shelf_life=shelf_life,
                 location=location,
                 price=price,
-                quantity=quantity
+                quantity=quantity,
+                warranty_years=warranty_years,
+                warranty_months=warranty_months
             )
             messages.success(request, 'Part added successfully!')
             return redirect('parts_list')
@@ -61,8 +57,9 @@ def parts_list(request):
         )
     else:
         parts = Part.objects.all()
+        
     context = {
-        'parts': parts
+        "parts": parts
     }
     return render(request, '(core)/parts/parts_list.html', context)
 
@@ -80,27 +77,12 @@ def edit_part(request, id):
     if request.method == 'POST':
         part.part_name = request.POST.get('part_name')
         
-        # Ensure purchase_date is handled correctly
-        purchase_date_str = request.POST.get('purchase_date')
-        try:
-            part.purchase_date = make_aware(datetime.strptime(purchase_date_str, '%Y-%m-%d'))
-        except ValueError:
-            part.purchase_date = None
-        
-        warranty_years = int(request.POST.get('warranty_years', 0) or 0)
-        warranty_months = int(request.POST.get('warranty_months', 0) or 0)
-        
-        # Calculate warranty end date
-        if part.purchase_date:
-            warranty_end_date = part.purchase_date + relativedelta(years=warranty_years, months=warranty_months)
-            part.part_warranty = warranty_end_date
-        else:
-            part.part_warranty = None
-        
+        part.warranty_years = int(request.POST.get('warranty_years', 0) or 0)
+        part.warranty_months = int(request.POST.get('warranty_months', 0) or 0)
         part.shelf_life = request.POST.get('shelf_life')
         part.price = request.POST.get('price')
         part.quantity = request.POST.get('quantity')
-        part.location_id = request.POST.get('location')
+        part.location = get_object_or_404(Location, pk=request.POST.get('location'))
         
         try:
             part.save()
@@ -109,20 +91,8 @@ def edit_part(request, id):
         except Exception as e:
             messages.error(request, f'Error updating Part: {e}')
     
-    # Calculate warranty years and months based on current date
-    warranty_years = 0
-    warranty_months = 0
-    warranty_end_date = part.part_warranty
-    
-    if part.purchase_date and warranty_end_date:
-        delta = warranty_end_date - part.purchase_date
-        warranty_years = delta.days // 365
-        warranty_months = (delta.days % 365) // 30  # Approximate calculation for months
-    
     context = {
         'part': part,
         'locations': Location.objects.all(),
-        'warranty_years': warranty_years,
-        'warranty_months': warranty_months,
     }
     return render(request, '(core)/parts/edit_part.html', context)

@@ -26,8 +26,17 @@
             <label for="department" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Filter by Department:</label>
             <select name="department" id="department" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 <option value="">All</option>
-                {% for department in locations %}
-                    <option value="{{department.location}}" {% if request.GET.department == department.location %}selected{% endif %}>{{department.location}}</option>
+                {% for department in departments %}
+                    <option value="{{department.name}}" {% if request.GET.department == department.name %}selected{% endif %}>{{department.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="flex-1">
+            <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Filter by Location:</label>
+            <select name="location" id="location" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="">All</option>
+                {% for location in locations %}
+                    <option value="{{location.location}}" {% if request.GET.location == location.location %}selected{% endif %}>{{location.location}}</option>
                 {% endfor %}
             </select>
         </div>

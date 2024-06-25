@@ -49,7 +49,7 @@ def get_ticket_details(_, ticket_id):
             "down_time": ticket.down_time,
             "up_time": ticket.up_time,
             "issue": ticket.issue_list,
-            "department": ticket.department.location,
+            "department": ticket.department.name,
             "status": ticket.status,
             "date_created": ticket.date_created,
         }

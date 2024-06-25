@@ -1,7 +1,7 @@
 from datetime import time
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse
-from core.models import Location, Ticket, Machine, Part
+from core.models import Department, Location, Ticket, Machine, Part
 
 # Create your views here.
 def homepage(request):
@@ -10,7 +10,8 @@ def homepage(request):
 
 def ticket(request):
     machines = Machine.objects.all()
-    departments = Location.objects.all()
+    departments = Department.objects.all()
+    locations = Location.objects.all()
 
     if request.method == 'POST':
         machine_id = request.POST['machine']
@@ -19,10 +20,12 @@ def ticket(request):
         up_time_str = request.POST['up_time'] if 'up_time' in request.POST else None
         issues = request.POST.get('issues', '')
         department_id = request.POST['department']
+        location_id = request.POST['location']
 
         try:
             machine = get_object_or_404(Machine, id=machine_id)
-            department = get_object_or_404(Location, id=department_id)
+            department = get_object_or_404(Department, id=department_id)
+            location = get_object_or_404(Location, id=location_id)
 
             down_time = time.fromisoformat(down_time_str)
             up_time = time.fromisoformat(up_time_str) if up_time_str else None
@@ -32,7 +35,8 @@ def ticket(request):
                 down_time=down_time,
                 up_time=up_time,
                 issue_list=issues,
-                department=department
+                department=department,
+                location=location
             )
             parts = Part.objects.filter(id__in=part_ids)
             ticket.parts.set(parts)
@@ -44,5 +48,6 @@ def ticket(request):
 
     return render(request, '(homepage)/ticket.html', {
         'machines': machines,
-        'departments': departments
+        'departments': departments,
+        'locations': locations
     })

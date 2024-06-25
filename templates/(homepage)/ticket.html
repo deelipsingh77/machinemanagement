@@ -14,7 +14,18 @@
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                 <option value="">Select Department</option>
                 {% for department in departments %}
-                    <option value="{{ department.id }}">{{ department.location }}</option>
+                    <option value="{{ department.id }}">{{ department.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="location" class="block text-sm font-medium text-gray-700 dark:text-white">Location:</label>
+            <select id="location" name="location" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                <option value="">Select Location</option>
+                {% for location in locations %}
+                    <option value="{{ location.id }}">{{ location.location }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -57,14 +68,14 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const departmentSelect = document.getElementById('department');
+        const locationSelect = document.getElementById('location');
         const machineSelect = document.getElementById('machine');
         const partsSelect = document.getElementById('parts');
 
-        departmentSelect.addEventListener('change', function () {
-            const departmentId = this.value;
-            if (departmentId) {
-                fetch(`/get_machines_by_location/${departmentId}/`)
+        locationSelect.addEventListener('change', function () {
+            const locationId = this.value;
+            if (locationId) {
+                fetch(`/get_machines_by_location/${locationId}/`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');

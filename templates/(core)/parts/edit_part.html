@@ -21,22 +21,15 @@
                 <input type="text" id="part_name" name="part_name" value="{{ part.part_name }}" placeholder="Enter part name..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" required>
             </div>
 
-            <!-- Purchase Date -->
-            <div class="flex flex-col">
-                <label for="purchase_date" class="text-sm font-medium dark:text-white">Purchase Date</label>
-                <input type="date" id="purchase_date" name="purchase_date" value="{{ part.purchase_date|date:'Y-m-d' }}" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
-            </div>
-
-
             <!-- Warranty Years and Months -->
             <div class="flex w-full">
                 <div class="flex flex-col w-1/2 pr-2">
                     <label for="warranty_years" class="text-sm font-medium dark:text-white">Warranty Years</label>
-                    <input type="number" id="warranty_years" name="warranty_years" min="0" value="{{ warranty_years }}" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty years...">
+                    <input type="number" id="warranty_years" name="warranty_years" min="0" value="{{ part.warranty_years }}" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty years...">
                 </div>
                 <div class="flex flex-col w-1/2 pl-2">
                     <label for="warranty_months" class="text-sm font-medium dark:text-white">Warranty Months</label>
-                    <input type="number" id="warranty_months" name="warranty_months" min="0" max="11" value="{{ warranty_months }}" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty months...">
+                    <input type="number" id="warranty_months" name="warranty_months" min="0" max="11" value="{{ part.warranty_months }}" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty months...">
                 </div>
             </div>
 
