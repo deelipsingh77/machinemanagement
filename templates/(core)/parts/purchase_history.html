@@ -1,0 +1,40 @@
+{% extends '(core)/layout.html' %}
+
+{% block title %}Part Purchases{% endblock title %}
+
+{% block content %}
+<div class="px-4 py-8">
+    <h1 class="text-2xl font-bold mb-4 text-black dark:text-white">Part Purchases</h1>
+
+    <div class="mx-4 overflow-x-auto">
+        <table class="min-w-full bg-white dark:bg-gray-800 dark:text-white rounded-lg overflow-hidden">
+            <thead class="bg-gray-200 dark:bg-gray-700">
+                <tr>
+                    <th class="px-4 py-2">Part Name</th>
+                    <th class="px-4 py-2">Vendor Name</th>
+                    <th class="px-4 py-2">Purchase Quantity</th>
+                    <th class="px-4 py-2">GST (%)</th>
+                    <th class="px-4 py-2">Total Amount</th>
+                    <th class="px-4 py-2">Purchase Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in purchases %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">{{ purchase.part.part_name }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">{{ purchase.vendor_name }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">{{ purchase.purchase_quantity }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">{{ purchase.gst }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">{{ purchase.total_amount }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white text-sm dark:bg-gray-600">{{ purchase.purchase_date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">No part purchases recorded yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

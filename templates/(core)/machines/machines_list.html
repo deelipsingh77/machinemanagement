@@ -3,7 +3,7 @@
 {% block title %}Machines List{% endblock title %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
+<div class="mx-auto px-4 py-8">
     <form method="get" class="mb-5 w-full flex justify-center gap-2">
         <input type="text" name="search" placeholder="Search machines..." class="w-[70%] px-4 py-2 border rounded-lg text-gray-700" value="{{ request.GET.search|default:'' }}">
         <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Search</button>

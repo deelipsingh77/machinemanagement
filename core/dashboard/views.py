@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, F, Q
 from django.core.paginator import Paginator
-from core.models import Machine, Part, Ticket, Location
+from core.models import Machine, Part, PartPurchase, Ticket, Location
 
 @login_required(login_url='login')
 def dashboard(request):
@@ -21,6 +21,10 @@ def dashboard(request):
         total_value=Sum('total_price_per_part')
     )['total_value']
     parts_value = parts_value if parts_value is not None else 0
+
+    # Calculate the total value of all parts purchased
+    total_purchased_value = PartPurchase.objects.aggregate(total_purchased_value=Sum('total_amount'))['total_purchased_value']
+    total_purchased_value = total_purchased_value if total_purchased_value is not None else 0
     
     # Count tickets based on status
     pending_tickets_count = Ticket.objects.filter(status='Pending').count()
@@ -68,6 +72,7 @@ def dashboard(request):
         "total_parts": total_parts,
         'machines_value': machines_value,
         'parts_value': parts_value,
+        'total_purchased_value': total_purchased_value,
         'pending_tickets_count': pending_tickets_count,
         'in_progress_tickets_count': in_progress_tickets_count,
         'completed_tickets_count': completed_tickets_count,

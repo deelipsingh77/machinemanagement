@@ -1,9 +1,11 @@
+from decimal import Decimal
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from core.models import Location, Part
+from core.models import Location, Part, PartPurchase
+from django.utils import timezone
 
 @login_required(login_url='login')
 def parts_page(request):
@@ -96,3 +98,48 @@ def edit_part(request, id):
         'locations': Location.objects.all(),
     }
     return render(request, '(core)/parts/edit_part.html', context)
+
+@login_required(login_url='login')
+def purchase_part(request):
+    if request.method == 'POST':
+        part_id = request.POST.get('part_id')
+        quantity = int(request.POST.get('quantity', 0))
+        vendor_name = request.POST.get('vendor_name')
+        gst = Decimal(request.POST.get('gst', '0.00'))
+        purchase_date = timezone.now()
+        part = get_object_or_404(Part, id=part_id)
+        
+        # Calculate total amount using Decimal for precise arithmetic
+        total_amount = part.price * (1 + gst / Decimal('100')) * quantity
+        
+        # part.quantity += quantity
+        part.save()
+        
+        part_purchase = PartPurchase.objects.create(
+            part=part,
+            vendor_name=vendor_name,
+            purchase_quantity=quantity,
+            gst=gst,
+            total_amount=total_amount,
+            purchase_date=purchase_date
+        )
+
+        messages.success(request, f"Part purchase recorded successfully: {part_purchase}")
+        return redirect('dashboard')  # Replace 'part_purchase' with your view name
+
+    locations = Location.objects.all()
+    parts = Part.objects.all()
+    
+    context = {
+        'locations': locations,
+        'parts': parts
+    }
+    return render(request, '(core)/parts/purchase_part.html', context)
+
+@login_required(login_url='login')
+def purchase_history(request):
+    purchases = PartPurchase.objects.all()
+    context = {
+        'purchases': purchases
+    }
+    return render(request, '(core)/parts/purchase_history.html', context)

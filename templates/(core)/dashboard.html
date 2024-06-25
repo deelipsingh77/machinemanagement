@@ -4,108 +4,140 @@
 
 {% block content %}
 <h1 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 p-5 pt-0">Dashboard</h1>
-<div class="container flex flex-col gap-10 mx-auto px-4">
+<div class="flex flex-col gap-10 mx-auto px-4">
 
     <!-- Dashboard Cards -->
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Machines Card -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-            <div class="flex items-center">
-                <div class="p-3 bg-blue-500 text-white rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ total_machines }}</h2>
-                    <div class="text-gray-500 dark:text-gray-400">Total Machines</div>
+        <a href="{% url "machines_list" %}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ total_machines }}</h2>
+                        <div class="text-gray-500 dark:text-gray-400">Total Machines</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
+
         <!-- Total Parts Card -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-            <div class="flex items-center">
-                <div class="p-3 bg-green-500 text-white rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ total_parts }}</h2>
-                    <div class="text-gray-500 dark:text-gray-400">Total Parts</div>
+        <a href="{% url "parts_list" %}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ total_parts }}</h2>
+                        <div class="text-gray-500 dark:text-gray-400">Total Parts</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
         <!-- Machines Value Card -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-            <div class="flex items-center">
-                <div class="p-3 bg-yellow-500 text-white rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ machines_value }}</h2>
-                    <div class="text-gray-500 dark:text-gray-400">Machines Value</div>
+        <a href="{% url "machines_list" %}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ machines_value }}</h2>
+                        <div class="text-gray-500 dark:text-gray-400">Machines Value</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
         <!-- Parts Value Card -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-            <div class="flex items-center">
-                <div class="p-3 bg-red-500 text-white rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ parts_value }}</h2>
-                    <div class="text-gray-500 dark:text-gray-400">Parts Value</div>
+        <a href="{% url "parts_list" %}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-red-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ parts_value }}</h2>
+                        <div class="text-gray-500 dark:text-gray-400">Closing Parts Valuation</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
         <!-- Pending Tickets Card -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-            <div class="flex items-center">
-                <div class="p-3 bg-red-500 text-white rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ pending_tickets_count }}</h2>
-                    <div class="text-gray-500 dark:text-gray-400">Pending Tickets</div>
+        <a href="{% url "tickets_list" %}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-red-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ pending_tickets_count }}</h2>
+                        <div class="text-gray-500 dark:text-gray-400">Pending Tickets</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
         <!-- In Progress Tickets Card -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-            <div class="flex items-center">
-                <div class="p-3 bg-yellow-500 text-white rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ in_progress_tickets_count }}</h2>
-                    <div class="text-gray-500 dark:text-gray-400">In Progress Tickets</div>
+        <a href="{% url "tickets_list" %}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ in_progress_tickets_count }}</h2>
+                        <div class="text-gray-500 dark:text-gray-400">In Progress Tickets</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
         <!-- Completed Tickets Card -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-            <div class="flex items-center">
-                <div class="p-3 bg-blue-500 text-white rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l6 6a2 2 0 0 0 3-3l-6-6a2 2 0 0 0-3 3z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ completed_tickets_count }}</h2>
-                    <div class="text-gray-500 dark:text-gray-400">Completed Tickets</div>
+        <a href="{% url "tickets_list" %}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l6 6a2 2 0 0 0 3-3l-6-6a2 2 0 0 0-3 3z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ completed_tickets_count }}</h2>
+                        <div class="text-gray-500 dark:text-gray-400">Completed Tickets</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
+
+        <!-- Total Purchased -->
+        <a href="{% url "purchase_history" %}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="min-h-6 min-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l6 6a2 2 0 0 0 3-3l-6-6a2 2 0 0 0-3 3z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">₹{{ total_purchased_value }}</h2>
+                        <div class="text-gray-500 dark:text-gray-400">Total Purchases</div>
+                    </div>
+                </div>
+            </div>
+        </a>
     </div>
 
     <!-- Tickets List -->

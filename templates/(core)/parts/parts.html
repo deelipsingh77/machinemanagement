@@ -15,5 +15,17 @@
                 class="h-20 w-32 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
             >View Parts</button>
         </a>
+
+        <a href="{% url "purchase_part" %}">
+            <button
+                class="h-20 w-32 bg-green-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
+            >Purchase Part</button>
+        </a>
+
+        <a href="{% url "purchase_history" %}">
+            <button
+                class="h-20 w-32 bg-yellow-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-2xl shadow-md"
+            >Purchase History</button>
+        </a>
     </div>
 {% endblock content %}
