@@ -64,6 +64,16 @@ class PartPurchase(models.Model):
     def __str__(self):
         return f"Purchased {self.purchase_quantity} of {self.part} from {self.vendor_name}"
     
+class MachinePurchase(models.Model):
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
+    vendor_name = models.CharField(max_length=200)
+    gst = models.DecimalField(max_digits=5, decimal_places=2)
+    purchase_date = models.DateField()
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Purchased {self.machine} from {self.vendor_name}"
+    
 class Location(models.Model):
     location = models.CharField(max_length=100)
 

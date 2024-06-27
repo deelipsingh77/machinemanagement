@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
 from core.models import Location, Part, PartPurchase
 from django.utils import timezone
 
@@ -97,37 +96,56 @@ def edit_part(request, id):
 @login_required(login_url='login')
 def purchase_part(request):
     if request.method == 'POST':
-        part_id = request.POST.get('part_id')
+        existing_or_new = request.POST.get('existing_or_new')
         quantity = int(request.POST.get('quantity', 0))
         vendor_name = request.POST.get('vendor_name')
         gst = Decimal(request.POST.get('gst', '0.00'))
-        purchase_date = request.POST.get('purchase_date')  # Get the purchase date from the form
-        part = get_object_or_404(Part, id=part_id)
-        
-        # Convert purchase_date to a datetime object
+        purchase_date = request.POST.get('purchase_date')
+
         if purchase_date:
             purchase_date = timezone.datetime.strptime(purchase_date, '%Y-%m-%d').date()
         else:
-            purchase_date = timezone.now().date()  # Default to current date if not provided
-        
-        # Calculate total amount using Decimal for precise arithmetic
-        total_amount = part.price * (1 + gst / Decimal('100')) * quantity
-        
-        # Update part quantity
-        # part.quantity += quantity
+            purchase_date = timezone.now().date()
+
+        if existing_or_new == 'existing':
+            part_id = request.POST.get('part_id')
+            part = get_object_or_404(Part, id=part_id)
+            total_amount = part.price * (1 + gst / Decimal('100')) * quantity
+        else:
+            new_part_name = request.POST.get('new_part_name')
+            new_part_location = request.POST.get('new_part_location')
+            warranty_years = int(request.POST.get('warranty_years', 0) or 0)
+            warranty_months = int(request.POST.get('warranty_months', 0) or 0)
+            shelf_life = request.POST.get('shelf_life')
+            new_part_price = Decimal(request.POST.get('new_part_price'))
+
+            location = get_object_or_404(Location, pk=new_part_location)
+
+            part = Part.objects.create(
+                part_name=new_part_name,
+                location=location,
+                price=new_part_price,
+                quantity=0,# Initial quantity as 0
+                warranty_years=warranty_years,
+                warranty_months=warranty_months,
+                shelf_life=shelf_life
+            )
+            total_amount = new_part_price * (1 + gst / Decimal('100')) * quantity
+
+        part.quantity += quantity
         part.save()
-        
+
         part_purchase = PartPurchase.objects.create(
             part=part,
             vendor_name=vendor_name,
             purchase_quantity=quantity,
             gst=gst,
             total_amount=total_amount,
-            purchase_date=purchase_date  # Use the purchase date from the form
+            purchase_date=purchase_date
         )
 
         messages.success(request, f"Part purchase recorded successfully: {part_purchase}")
-        return redirect('dashboard')  # Replace 'dashboard' with your view name
+        return redirect('dashboard')
 
     locations = Location.objects.all()
     parts = Part.objects.all()
@@ -163,7 +181,7 @@ def purchase_history(request):
         )
 
     context = {
-        'purchases': purchases,
+        'purchases': purchases.order_by('-purchase_date'),
         'locations': Location.objects.all()
     }
     return render(request, '(core)/parts/purchase_history.html', context)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Location, Machine, Part, MachinePart, Ticket, TicketResolution, Department, PartPurchase, UsedPart
+from .models import Location, Machine, MachinePurchase, Part, MachinePart, Ticket, TicketResolution, Department, PartPurchase, UsedPart
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
@@ -52,3 +52,9 @@ class PartPurchaseAdmin(admin.ModelAdmin):
     list_display = ('part', 'vendor_name', 'purchase_quantity', 'gst', 'total_amount', 'purchase_date')
     list_filter = ('part', 'purchase_date')
     search_fields = ('part__part_name', 'vendor_name')
+
+@admin.register(MachinePurchase)
+class MachinePurchaseAdmin(admin.ModelAdmin):
+    list_display = ('machine', 'vendor_name', 'gst', 'total_amount', 'purchase_date')
+    list_filter = ('machine', 'purchase_date')
+    search_fields = ('machine__machine_name', 'vendor_name')

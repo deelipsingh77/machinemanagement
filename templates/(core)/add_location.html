@@ -32,6 +32,7 @@
                             <tr>
                                 <th scope="col" class="px-5 py-3 bg-gray-200 dark:bg-gray-700 text-xs font-medium text-gray-700 dark:text-white uppercase tracking-wider text-left">ID</th>
                                 <th scope="col" class="px-5 py-3 bg-gray-200 dark:bg-gray-700 text-xs font-medium text-gray-700 dark:text-white uppercase tracking-wider text-left">Location Name</th>
+                                <th scope="col" class="px-5 py-3 bg-gray-200 dark:bg-gray-700 text-xs font-medium text-gray-700 dark:text-white uppercase tracking-wider text-left">Remove Location</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,6 +43,11 @@
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-600 text-sm dark:text-white">
                                     {{ location.location }}
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-600 text-sm dark:text-white">
+                                    <a href="{% url "remove_location" location.id %}">
+                                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Remove</button>
+                                    </a>
                                 </td>
                             </tr>
                             {% empty %}

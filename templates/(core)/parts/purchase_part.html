@@ -8,13 +8,61 @@
     
     <form action="{% url 'purchase_part' %}" method="POST" class="max-w-lg mx-auto bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
         {% csrf_token %}
+        
         <div class="mb-4">
+            <label for="existing_or_new" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase:</label>
+            <select id="existing_or_new" name="existing_or_new" class="mt-1 block w-full py-2 px-3 border text-gray-700 dark:text-gray-300 border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="existing">Existing Part</option>
+                <option value="new">New Part</option>
+            </select>
+        </div>
+
+        <div id="existing-part-fields" class="mb-4">
             <label for="part_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Part:</label>
             <select id="part_id" name="part_id" class="mt-1 block w-full py-2 px-3 border text-gray-700 dark:text-gray-300 border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 {% for part in parts %}
                     <option value="{{ part.id }}" data-price="{{ part.price }}">{{ part.part_name }} - {{ part.location }}</option>
                 {% endfor %}
             </select>
+        </div>
+
+        <div id="new-part-fields" class="hidden">
+            <div class="mb-4">
+                <label for="new_part_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Part Name:</label>
+                <input type="text" id="new_part_name" name="new_part_name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div class="mb-4">
+                <label for="new_part_location" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location:</label>
+                <select id="new_part_location" name="new_part_location" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    {% for location in locations %}
+                        <option value="{{ location.id }}">{{ location.location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="new_part_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price:</label>
+                <input type="number" id="new_part_price" name="new_part_price" step="0.01" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+                        <!-- Warranty Years and Months -->
+            <div class="flex w-full mb-4">
+                <div class="flex flex-col w-1/2 pr-2">
+                    <label for="warranty_years" class="text-sm font-medium dark:text-white">Warranty Years</label>
+                    <input type="number" id="warranty_years" name="warranty_years" min="0" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty years...">
+                </div>
+                <div class="flex flex-col w-1/2 pl-2">
+                    <label for="warranty_months" class="text-sm font-medium dark:text-white">Warranty Months</label>
+                    <input type="number" id="warranty_months" name="warranty_months" min="0" max="11" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty months...">
+                </div>
+            </div>
+
+            <!-- Shelf Life -->
+            <div class="flex flex-col mb-4">
+                <label for="shelf_life" class="text-sm font-medium dark:text-white">Shelf Life</label>
+                <input type="text" id="shelf_life" name="shelf_life" placeholder="Enter shelf life..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+            </div>
         </div>
 
         <div class="mb-4">
@@ -38,7 +86,7 @@
         </div>
 
         <div class="mb-4">
-            <label for="total_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Date:</label>
+            <label for="purchase_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Date:</label>
             <input type="date" id="purchase_date" name="purchase_date" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
         </div>
 
@@ -49,29 +97,43 @@
 </div>
 
 <script>
-    // JavaScript to calculate total amount based on GST
     const gstInput = document.getElementById('gst');
     const totalAmountInput = document.getElementById('total_amount');
     const partSelect = document.getElementById('part_id');
+    const existingOrNewSelect = document.getElementById('existing_or_new');
+    const existingPartFields = document.getElementById('existing-part-fields');
+    const newPartFields = document.getElementById('new-part-fields');
 
-    gstInput.addEventListener('input', function() {
-        calculateTotalAmount();
-    });
-
-    partSelect.addEventListener('change', function() {
-        calculateTotalAmount();
-    });
+    gstInput.addEventListener('input', calculateTotalAmount);
+    partSelect.addEventListener('change', calculateTotalAmount);
+    existingOrNewSelect.addEventListener('change', togglePartFields);
 
     function calculateTotalAmount() {
-        const gst = parseFloat(gstInput.value);
-        const price = parseFloat(partSelect.options[partSelect.selectedIndex].getAttribute('data-price'));
-        const quantity = parseInt(document.getElementById('quantity').value);
-        
+        let gst = parseFloat(gstInput.value);
+        let price = 0;
+        let quantity = parseInt(document.getElementById('quantity').value);
+
+        if (existingOrNewSelect.value === 'existing') {
+            price = parseFloat(partSelect.options[partSelect.selectedIndex].getAttribute('data-price'));
+        } else {
+            price = parseFloat(document.getElementById('new_part_price').value);
+        }
+
         if (!isNaN(gst) && !isNaN(price) && !isNaN(quantity)) {
-            const totalAmount = price * (1 + gst / 100) * quantity;
+            let totalAmount = price * (1 + gst / 100) * quantity;
             totalAmountInput.value = totalAmount.toFixed(2);
         } else {
             totalAmountInput.value = '';
+        }
+    }
+
+    function togglePartFields() {
+        if (existingOrNewSelect.value === 'existing') {
+            existingPartFields.classList.remove('hidden');
+            newPartFields.classList.add('hidden');
+        } else {
+            existingPartFields.classList.add('hidden');
+            newPartFields.classList.remove('hidden');
         }
     }
 </script>

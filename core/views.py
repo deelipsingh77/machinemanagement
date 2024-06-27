@@ -43,3 +43,17 @@ def add_department(request):
     
     context = {"departments": departments}
     return render(request, "(core)/add_department.html", context)
+
+@login_required(login_url="login")
+def remove_department(request, id):
+    department = Department.objects.get(id=id)
+    department.delete()
+    messages.success(request, "Department removed successfully.")
+    return redirect("add_department")
+
+@login_required(login_url="login")
+def remove_location(request, id):
+    location = Location.objects.get(id=id)
+    location.delete()
+    messages.success(request, "Location removed successfully.")
+    return redirect("add_location")
