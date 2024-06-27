@@ -9,7 +9,11 @@
     "test": "py manage.py test",
     "shell": "py manage.py shell",
     "su": "py manage.py createsuperuser",
-    "collectstatic": "py manage.py collectstatic"
+    "collectstatic": "py manage.py collectstatic",
+    "install": "pip install",
+    "postinstall": "pip freeze > requirements.txt",
+    "uninstall": "pip uninstall",
+    "postuninstall": "pip freeze > requirements.txt"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.4"

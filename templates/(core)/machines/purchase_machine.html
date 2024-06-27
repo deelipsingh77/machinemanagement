@@ -1,0 +1,188 @@
+{% extends '(core)/layout.html' %}
+
+{% block title %}Machine Purchase{% endblock title %}
+
+{% block content %}
+<div class="mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-black dark:text-white mb-4">Purchase Machine</h1>
+    
+    <form method="POST" enctype="multipart/form-data" class="max-w-lg mx-auto bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        {% csrf_token %}
+        
+        <!-- Purchase Type -->
+        <div class="mb-4">
+            <label for="existing_or_new" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Type:</label>
+            <select id="existing_or_new" name="existing_or_new" class="mt-1 block w-full py-2 px-3 border text-gray-700 dark:text-gray-300 border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="existing">Existing Machine</option>
+                <option value="new">New Machine</option>
+            </select>
+        </div>
+
+        <!-- Existing Machine Fields -->
+        <div id="existing-machine-fields" class="mb-4">
+            <label for="machine_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Machine:</label>
+            <select id="machine_id" name="machine_id" class="mt-1 block w-full py-2 px-3 border text-gray-700 dark:text-gray-300 border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                {% for machine in machines %}
+                    <option value="{{ machine.id }}" data-price="{{ machine.price }}">{{ machine.machine_name }} - {{ machine.location }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- New Machine Fields -->
+        <div id="new-machine-fields" class="hidden">
+            <div class="mb-4">
+                <label for="new_machine_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Machine Name:</label>
+                <input type="text" id="new_machine_name" name="new_machine_name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div class="mb-4">
+                <label for="new_machine_location" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location:</label>
+                <select id="new_machine_location" name="new_machine_location" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    {% for location in locations %}
+                        <option value="{{ location.id }}">{{ location.location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="new_machine_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price:</label>
+                <input type="number" id="new_machine_price" name="new_machine_price" step="0.01" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <!-- Warranty Years and Months -->
+            <div class="flex w-full mb-4">
+                <div class="flex flex-col w-1/2 pr-2">
+                    <label for="warranty_years" class="text-sm font-medium dark:text-white">Warranty Years</label>
+                    <input type="number" id="warranty_years" name="warranty_years" min="0" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty years...">
+                </div>
+                <div class="flex flex-col w-1/2 pl-2">
+                    <label for="warranty_months" class="text-sm font-medium dark:text-white">Warranty Months</label>
+                    <input type="number" id="warranty_months" name="warranty_months" min="0" max="11" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400" placeholder="Enter warranty months...">
+                </div>
+            </div>
+
+            <!-- Shelf Life -->
+            <div class="flex flex-col mb-4">
+                <label for="shelf_life" class="text-sm font-medium dark:text-white">Shelf Life</label>
+                <input type="text" id="shelf_life" name="shelf_life" placeholder="Enter shelf life..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2 rounded mt-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+            </div>
+        </div>
+
+        <!-- Quantity -->
+        <div class="mb-4">
+            <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" value="1" min="1" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Vendor Name -->
+        <div class="mb-4">
+            <label for="vendor_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Vendor Name:</label>
+            <input type="text" id="vendor_name" name="vendor_name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- GST -->
+        <div class="mb-4">
+            <label for="gst" class="block text-sm font-medium text-gray-700 dark:text-gray-300">GST (%):</label>
+            <input type="number" id="gst" name="gst" step="0.01" min="0" max="100" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Total Amount -->
+        <div class="mb-4">
+            <label for="total_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Amount:</label>
+            <input type="text" id="total_amount" name="total_amount" readonly class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Purchase Date -->
+        <div class="mb-4">
+            <label for="purchase_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Date:</label>
+            <input type="date" id="purchase_date" name="purchase_date" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Excel Upload -->
+        <div class="mb-4">
+            <label for="excel_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Upload Excel File:</label>
+            <input type="file" id="excel_file" name="excel_file" accept=".xlsx, .xls" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Purchase</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const existingOrNewSelect = document.getElementById('existing_or_new');
+    const existingMachineFields = document.getElementById('existing-machine-fields');
+    const newMachineFields = document.getElementById('new-machine-fields');
+    const machineIdSelect = document.getElementById('machine_id');
+    const newMachineNameInput = document.getElementById('new_machine_name');
+    const newMachineLocationSelect = document.getElementById('new_machine_location');
+    const newMachinePriceInput = document.getElementById('new_machine_price');
+    const warrantyYearsInput = document.getElementById('warranty_years');
+    const warrantyMonthsInput = document.getElementById('warranty_months');
+    const shelfLifeInput = document.getElementById('shelf_life');
+
+    existingOrNewSelect.addEventListener('change', toggleFields);
+
+    function toggleFields() {
+        if (existingOrNewSelect.value === 'existing') {
+            existingMachineFields.classList.remove('hidden');
+            newMachineFields.classList.add('hidden');
+            newMachineNameInput.removeAttribute('required');
+            newMachineLocationSelect.removeAttribute('required');
+            newMachinePriceInput.removeAttribute('required');
+            warrantyYearsInput.removeAttribute('required');
+            warrantyMonthsInput.removeAttribute('required');
+            shelfLifeInput.removeAttribute('required');
+        } else if (existingOrNewSelect.value === 'new') {
+            existingMachineFields.classList.add('hidden');
+            newMachineFields.classList.remove('hidden');
+            newMachineNameInput.setAttribute('required', 'required');
+            newMachineLocationSelect.setAttribute('required', 'required');
+            newMachinePriceInput.setAttribute('required', 'required');
+            warrantyYearsInput.setAttribute('required', 'required');
+            warrantyMonthsInput.setAttribute('required', 'required');
+            shelfLifeInput.setAttribute('required', 'required');
+        }
+    }
+
+    const gstInput = document.getElementById('gst');
+    const totalAmountInput = document.getElementById('total_amount');
+    const quantityInput = document.getElementById('quantity');
+
+    gstInput.addEventListener('input', calculateTotalAmount);
+    quantityInput.addEventListener('input', calculateTotalAmount);
+    machineIdSelect.addEventListener('change', updateMachinePrice);
+
+    function calculateTotalAmount() {
+        let gst = parseFloat(gstInput.value);
+        let quantity = parseInt(quantityInput.value);
+        
+        if (isNaN(gst)) {
+            gst = 0;
+        }
+        if (isNaN(quantity) || quantity <= 0) {
+            quantity = 1;
+        }
+
+        let machinePrice = parseFloat(machineIdSelect.options[machineIdSelect.selectedIndex].getAttribute('data-price'));
+        if (isNaN(machinePrice)) {
+            machinePrice = parseFloat(newMachinePriceInput.value);
+        }
+
+        let totalAmount = machinePrice * quantity * (1 + gst / 100);
+        totalAmountInput.value = totalAmount.toFixed(2);
+    }
+
+    function updateMachinePrice() {
+        let machinePrice = parseFloat(machineIdSelect.options[machineIdSelect.selectedIndex].getAttribute('data-price'));
+        if (!isNaN(machinePrice)) {
+            newMachinePriceInput.value = machinePrice.toFixed(2);
+        } else {
+            newMachinePriceInput.value = '';
+        }
+        calculateTotalAmount();
+    }
+</script>
+{% endblock %}

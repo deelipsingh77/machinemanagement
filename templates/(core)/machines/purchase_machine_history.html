@@ -1,0 +1,76 @@
+{% extends '(core)/layout.html' %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4 text-black dark:text-white">Machine Purchase History</h1>
+
+    <form method="GET" action="" class="mb-6">
+        <div class="flex gap-4">
+            <!-- Start Date -->
+            <div class="mb-4">
+                <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" value="{{ start_date }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <!-- End Date -->
+            <div class="mb-4">
+                <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date:</label>
+                <input type="date" id="end_date" name="end_date" value="{{ end_date }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <!-- Location -->
+            <div class="mb-4">
+                <label for="location_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location:</label>
+                <select id="location_id" name="location_id" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">All Locations</option>
+                    {% for location in locations %}
+                        <option value="{{ location.id }}" {% if location.id == location_id %}selected{% endif %}>{{ location.location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Search -->
+            <div class="mb-4 md:col-span-2">
+                <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search:</label>
+                <input type="text" id="search" name="search" value="{{ search_query }}" placeholder="Search by Machine Name, Vendor, Quantity, or Amount" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="mt-6">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Filter</button>
+            </div>
+        </div>
+
+    </form>
+
+    <!-- Purchase History Table -->
+    <div class="overflow-x-auto">
+        <table class="table-auto w-full bg-white dark:bg-gray-700 dark:text-gray-300 rounded-lg overflow-hidden shadow-md">
+            <thead>
+                <tr class="bg-blue-500 dark:bg-gray-800 text-white">
+                    <th class="px-4 py-2">Machine Name</th>
+                    <th class="px-4 py-2">Vendor Name</th>
+                    <th class="px-4 py-2">Quantity</th>
+                    <th class="px-4 py-2">Total Amount</th>
+                    <th class="px-4 py-2">Purchase Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in purchases %}
+                <tr class="border-b dark:border-gray-600">
+                    <td class="px-4 py-2">{{ purchase.machine.machine_name }}</td>
+                    <td class="px-4 py-2">{{ purchase.vendor_name }}</td>
+                    <td class="px-4 py-2">{{ purchase.purchase_quantity }}</td>
+                    <td class="px-4 py-2">{{ purchase.total_amount }}</td>
+                    <td class="px-4 py-2">{{ purchase.purchase_date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-4 py-2 text-center">No purchases found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -9,4 +9,6 @@ urlpatterns = [
     path('machines_list/', views.machines_list, name='machines_list'),
     path('edit_machine/<int:id>/', views.edit_machine, name='edit_machine'),
     path('delete_machine/<int:id>/', views.delete_machine, name='delete_machine'),
+    path('purchase_machine/', views.purchase_machine, name='purchase_machine'),
+    path('purchase_machine_history/', views.purchase_machine_history, name='purchase_machine_history')
 ]
