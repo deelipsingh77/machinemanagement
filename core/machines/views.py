@@ -1,14 +1,14 @@
+import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from core.models import Location, Machine, MachinePart, MachinePurchase, Part
+from core.models import ExcelFile, Location, Machine, MachinePart, MachinePurchase, Part
 from django.utils import timezone
 from decimal import Decimal
 from .utils import calculate_total_amount, process_excel_data
-import pandas as pd
 
 @login_required(login_url='login')
 def machines_page(request):
@@ -151,8 +151,20 @@ def machine_mapping_list(request):
 @login_required(login_url='login')
 def purchase_machine(request):
     if request.method == 'POST':
-        existing_or_new = request.POST.get('existing_or_new')
+        if 'excel_file' in request.FILES:
+            excel_file = request.FILES['excel_file']
+            obj = ExcelFile.objects.create(file=excel_file)
+            file_path = obj.file.path
+            success, message = process_excel_data(file_path)
+            os.remove(file_path)
+            obj.delete()
+            if success:
+                messages.success(request, 'Excel file processed successfully.')
+            else:
+                messages.error(request, f"Error processing Excel file: {message}")
+            return redirect('dashboard')
 
+        existing_or_new = request.POST.get('existing_or_new')
         if existing_or_new == 'existing':
             machine_id = request.POST.get('machine_id')
             quantity = int(request.POST.get('quantity', 1))
@@ -224,7 +236,6 @@ def purchase_machine(request):
             messages.success(request, f"New machine purchase recorded successfully: {machine_purchase}")
             return redirect('dashboard')
 
-    # If request method is not POST or any other condition
     locations = Location.objects.all()
     machines = Machine.objects.all()
     context = {
@@ -232,12 +243,6 @@ def purchase_machine(request):
         'machines': machines
     }
     return render(request, '(core)/machines/purchase_machine.html', context)
-
-def calculate_total_amount(price, quantity, gst):
-    return price * (1 + gst / Decimal('100')) * quantity
-
-def calculate_total_amount(price, quantity, gst):
-    return price * (1 + gst / Decimal('100')) * quantity
 
 @login_required(login_url='login')
 def purchase_machine_history(request):

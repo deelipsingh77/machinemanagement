@@ -72,6 +72,11 @@ class MachinePurchase(models.Model):
     purchase_quantity = models.IntegerField(default=1)
     purchase_date = models.DateField()
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def save(self, *args, **kwargs):
+        self.machine.quantity += self.purchase_quantity
+        self.machine.save()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Purchased {self.machine} from {self.vendor_name}"
@@ -149,3 +154,8 @@ class UsedPart(models.Model):
 
     def __str__(self):
         return f"{self.quantity_used} of {self.part} used in Ticket Resolution {self.ticket_resolution}"
+
+
+class ExcelFile(models.Model):
+    file = models.FileField(upload_to='uploads/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)

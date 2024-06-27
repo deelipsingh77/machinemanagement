@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Location, Machine, MachinePurchase, Part, MachinePart, Ticket, TicketResolution, Department, PartPurchase, UsedPart
+from .models import ExcelFile, Location, Machine, MachinePurchase, Part, MachinePart, Ticket, TicketResolution, Department, PartPurchase, UsedPart
+
+admin.site.register(ExcelFile)
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
