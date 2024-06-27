@@ -1,10 +1,13 @@
 from decimal import Decimal
+import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from core.models import Location, Part, PartPurchase
+from core.models import ExcelFile, Location, Part, PartPurchase
 from django.utils import timezone
+
+from core.parts.utils import process_part_excel_data
 
 @login_required(login_url='login')
 def parts_page(request):
@@ -96,6 +99,19 @@ def edit_part(request, id):
 @login_required(login_url='login')
 def purchase_part(request):
     if request.method == 'POST':
+        if 'excel_file' in request.FILES:
+            excel_file = request.FILES['excel_file']
+            obj = ExcelFile.objects.create(file=excel_file)
+            file_path = obj.file.path
+            success, message = process_part_excel_data(file_path)
+            os.remove(file_path)
+            obj.delete()
+            if success:
+                messages.success(request, 'Excel file processed successfully.')
+            else:
+                messages.error(request, f"Error processing Excel file: {message}")
+            return redirect('purchase_history')
+
         existing_or_new = request.POST.get('existing_or_new')
         quantity = int(request.POST.get('quantity', 0))
         vendor_name = request.POST.get('vendor_name')
@@ -125,14 +141,14 @@ def purchase_part(request):
                 part_name=new_part_name,
                 location=location,
                 price=new_part_price,
-                quantity=0,# Initial quantity as 0
+                quantity=0,  # Initial quantity as 0
                 warranty_years=warranty_years,
                 warranty_months=warranty_months,
-                shelf_life=shelf_life
+                shelf_life=int(shelf_life)
             )
             total_amount = new_part_price * (1 + gst / Decimal('100')) * quantity
 
-        part.quantity += quantity
+        # part.quantity += quantity
         part.save()
 
         part_purchase = PartPurchase.objects.create(
@@ -145,11 +161,11 @@ def purchase_part(request):
         )
 
         messages.success(request, f"Part purchase recorded successfully: {part_purchase}")
-        return redirect('dashboard')
+        return redirect('purchase_history')
 
     locations = Location.objects.all()
     parts = Part.objects.all()
-    
+
     context = {
         'locations': locations,
         'parts': parts

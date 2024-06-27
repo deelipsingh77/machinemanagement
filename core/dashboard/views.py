@@ -11,7 +11,11 @@ def dashboard(request):
     total_parts = total_parts if total_parts is not None else 0
     
     # Calculate the total value of all machines
-    machines_value = Machine.objects.aggregate(total_value=Sum('price'))['total_value']
+    machines_value = Machine.objects.annotate(
+        total_value_per_machine=F('price') * F('quantity')
+    ).aggregate(
+        total_value=Sum('total_value_per_machine')
+    )['total_value']
     machines_value = machines_value if machines_value is not None else 0
     
     # Calculate the total value of all parts

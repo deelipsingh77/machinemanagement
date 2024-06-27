@@ -6,9 +6,18 @@
 <div class="mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold text-black dark:text-white mb-4">Purchase Part</h1>
     
-    <form action="{% url 'purchase_part' %}" method="POST" class="max-w-lg mx-auto bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form action="{% url 'purchase_part' %}" method="POST" enctype="multipart/form-data" class="max-w-lg mx-auto bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
         {% csrf_token %}
         
+        <!-- Excel Upload -->
+        <div class="mb-4">
+            <label for="excel_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Upload Excel File:</label>
+            <div class="flex">
+                <input type="file" id="excel_file" name="excel_file" accept=".xlsx, .xls" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 ml-1 rounded focus:outline-none focus:shadow-outline">Submit</button>
+            </div>
+        </div>
+
         <div class="mb-4">
             <label for="existing_or_new" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase:</label>
             <select id="existing_or_new" name="existing_or_new" class="mt-1 block w-full py-2 px-3 border text-gray-700 dark:text-gray-300 border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">

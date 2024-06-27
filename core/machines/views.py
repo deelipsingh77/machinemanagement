@@ -162,7 +162,7 @@ def purchase_machine(request):
                 messages.success(request, 'Excel file processed successfully.')
             else:
                 messages.error(request, f"Error processing Excel file: {message}")
-            return redirect('dashboard')
+            return redirect('purchase_machine_history')
 
         existing_or_new = request.POST.get('existing_or_new')
         if existing_or_new == 'existing':
@@ -190,7 +190,7 @@ def purchase_machine(request):
             )
 
             messages.success(request, f"Machine purchase recorded successfully: {machine_purchase}")
-            return redirect('dashboard')
+            return redirect('purchase_machine_history')
 
         elif existing_or_new == 'new':
             new_machine_name = request.POST.get('new_machine_name')
@@ -234,7 +234,7 @@ def purchase_machine(request):
             )
 
             messages.success(request, f"New machine purchase recorded successfully: {machine_purchase}")
-            return redirect('dashboard')
+            return redirect('purchase_machine_history')
 
     locations = Location.objects.all()
     machines = Machine.objects.all()
